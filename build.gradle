@@ -1,0 +1,29 @@
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'war'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+// this turns logging on in tests:
+test.testLogging.showStandardStreams = true
+
+dependencies {
+    compile 'ch.qos.logback:logback-classic:+',
+            //'io.javaslang:javaslang:+',
+            'com.h2database:h2:+'
+
+    compileOnly 'org.projectlombok:lombok:+'
+    testCompile 'org.projectlombok:lombok:+'
+    testCompile 'org.junit.jupiter:junit-jupiter-api:+',
+            'org.hamcrest:java-hamcrest:+'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.4'
+}
