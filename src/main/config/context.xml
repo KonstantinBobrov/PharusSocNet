@@ -30,14 +30,14 @@
     <Manager pathname="" />
     -->
 	
-	<!-- Внесли вручную  удалить! -->
-	<Resource 	name="jdbc/TestDB" 
-				auth="Container" 
+	<!-- JNDI настройка с базой TomCat! -->
+	<Resource 	name="jdbc/TestDB"
+				auth="Container"
 				type="javax.sql.DataSource"
-				maxTotal="100" 
-				maxIdle="30" 
+				maxTotal="100"
+				maxIdle="30"
 				maxWaitMillis="10000"
-				username="" password="" 
+				username="" password=""
 				driverClassName="org.h2.Driver"
 				url="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"/>
 </Context>
