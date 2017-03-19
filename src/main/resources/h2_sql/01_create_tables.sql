@@ -9,19 +9,26 @@ CREATE TABLE users (
 );
 
 CREATE TABLE friends (
-  'id' INT AUTO_INCREMENT PRIMARY KEY,
+  id INT AUTO_INCREMENT PRIMARY KEY,
   id_user INT,
   id_friend INT,
   FOREIGN KEY (id_user) REFERENCES users (id),
-  FOREIGN KEY (id_friend) REFERENCES users (id),
+  FOREIGN KEY (id_friend) REFERENCES users (id)
 );
 
 CREATE TABLE messages (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  from_user_id   INT NOT NULL DEFAULT '0',
-  to_user_id   INT NOT NULL DEFAULT '0',
+  from_user_id   INT,
+  to_user_id   INT,
   message TEXT,
   post_time DATETIME,
+  FOREIGN KEY (from_user_id) REFERENCES users (id),
+  FOREIGN KEY (to_user_id) REFERENCES users (id)
+);
+
+CREATE TABLE models(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(32),
 );
 
 CREATE TABLE cars(
@@ -34,17 +41,7 @@ CREATE TABLE cars(
   FOREIGN KEY (model_id) REFERENCES models(id)
 );
 
-CREATE TABLE vendors(
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(32)
-);
 
-CREATE TABLE models(
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  vendor_id INT NOT NULL,
-  name VARCHAR(32),
-  FOREIGN KEY (vendor_id) REFERENCES vendors(id)
-);
 
 CREATE TABLE posts(
   id INT AUTO_INCREMENT PRIMARY KEY,

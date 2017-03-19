@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface MessageDao {
     int create(Message message) throws DAOException;
 
-    default void update(Model model) throws DAOException{
+    default void update(Message message) throws DAOException{
       throw new UnsupportedOperationException();
     }
 

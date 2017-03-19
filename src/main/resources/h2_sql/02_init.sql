@@ -1,13 +1,9 @@
-INSERT INTO vendors(name) VALUES ('Nissan');
-INSERT INTO vendors(name) VALUES ('BMW');
-INSERT INTO vendors(name) VALUES ('Mercedes');
-
-INSERT INTO models(vendor_id, name) VALUES (1, 'Qashqai');
-INSERT INTO models(vendor_id, name) VALUES (1, 'Juke');
-INSERT INTO models(vendor_id, name) VALUES (1, 'Almera');
-INSERT INTO models(vendor_id, name) VALUES (2, 'X3');
-INSERT INTO models(vendor_id, name) VALUES (2, 'X5');
-INSERT INTO models(vendor_id, name) VALUES (2, 'e38 750i');
-INSERT INTO models(vendor_id, name) VALUES (3, 'Vito');
-INSERT INTO models(vendor_id, name) VALUES (3, 'CLS');
-INSERT INTO models(vendor_id, name) VALUES (3, 'W212i');
+INSERT INTO models(name) VALUES ('Nissan Qashqai');
+INSERT INTO models(name) VALUES ('Nissan Juke');
+INSERT INTO models(name) VALUES ('Nissan Almera');
+INSERT INTO models(name) VALUES ('BMW X3');
+INSERT INTO models(name) VALUES ('BMW X5');
+INSERT INTO models(name) VALUES ('BMW e38 750i');
+INSERT INTO models(name) VALUES ('Mercedes Vito');
+INSERT INTO models(name) VALUES ('Mercedes CLS');
+INSERT INTO models(name) VALUES ('Mercedes W212i');
