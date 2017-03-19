@@ -5,6 +5,12 @@ import ru.pharus.socnetwork.entity.enums.Role;
 
 import java.time.LocalDate;
 
+/**
+ * User entity class
+ *
+ * Getters and Setters, Equals and Hashcode methods
+ * Are made by hand without loombok and IntelliJ IDEA generator
+ */
 public class User {
     private int id;
     private String login;
@@ -14,6 +20,8 @@ public class User {
     private LocalDate birthDate;
     private LocalDate registerDate;
     private Role role;
+
+    // TODO: 19.03.2017 Equals and Heshcode
 
     public User(){
 
@@ -85,4 +93,6 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
+
+
 }

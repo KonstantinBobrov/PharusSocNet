@@ -1,4 +1,4 @@
-CREATE TABLE drivers (
+CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   login VARCHAR(64) UNIQUE NOT NULL,
   password VARCHAR(128) NOT NULL,
@@ -11,19 +11,19 @@ CREATE TABLE drivers (
 
 CREATE TABLE friends (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  id_driver INT,
+  id_user INT,
   id_friend INT,
-  FOREIGN KEY (id_driver) REFERENCES drivers(id),
-  FOREIGN KEY (id_friend) REFERENCES drivers(id),
+  FOREIGN KEY (id_user) REFERENCES users (id),
+  FOREIGN KEY (id_friend) REFERENCES users (id),
 );
 
 CREATE TABLE cars(
   id INT AUTO_INCREMENT PRIMARY KEY,
-  driver_id INT,
+  user_id INT,
   model_id INT NOT NULL,
   car_year YEAR,
   car_number VARCHAR(10),
-  FOREIGN KEY (driver_id) REFERENCES drivers(id),
+  FOREIGN KEY (user_id) REFERENCES users (id),
   FOREIGN KEY (model_id) REFERENCES models(id)
 );
 
@@ -41,10 +41,10 @@ CREATE TABLE models(
 
 CREATE TABLE posts(
   id INT AUTO_INCREMENT PRIMARY KEY,
-  driver_id INT,
+  user_id INT,
   title VARCHAR(255) NOT NULL,
   post TEXT,
-  FOREIGN KEY (driver_id) REFERENCES drivers(id)
+  FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
-CREATE INDEX full_name ON drivers(full_name);
+CREATE INDEX full_name ON users (full_name);
