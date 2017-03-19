@@ -4,6 +4,7 @@ package ru.pharus.socnetwork.entity;
 import ru.pharus.socnetwork.entity.enums.Role;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * User entity class
@@ -16,9 +17,8 @@ public class User {
     private String login;
     private String password;
     private String fullName;
-    private String city;
     private LocalDate birthDate;
-    private LocalDate registerDate;
+    private LocalDateTime registerDate;
     private Role role;
 
     // TODO: 19.03.2017 Equals and Heshcode
@@ -27,12 +27,11 @@ public class User {
 
     }
 
-    public User(int id, String login, String password, String fullName, String city, LocalDate birthDate, LocalDate registerDate, Role role) {
+    public User(int id, String login, String password, String fullName, LocalDate birthDate, LocalDateTime registerDate, Role role) {
         this.id = id;
         this.login = login;
         this.password = password;
         this.fullName = fullName;
-        this.city = city;
         this.birthDate = birthDate;
         this.registerDate = registerDate;
         this.role = role;
@@ -66,13 +65,6 @@ public class User {
         this.fullName = fullName;
     }
 
-    public String getCity() {
-        return city;
-    }
-    public void setCity(String city) {
-        this.city = city;
-    }
-
     public LocalDate getBirthDate() {
         return birthDate;
     }
@@ -80,10 +72,10 @@ public class User {
         this.birthDate = birthDate;
     }
 
-    public LocalDate getRegisterDate() {
+    public LocalDateTime getRegisterDate() {
         return registerDate;
     }
-    public void setRegisterDate(LocalDate registerDate) {
+    public void setRegisterDate(LocalDateTime registerDate) {
         this.registerDate = registerDate;
     }
 

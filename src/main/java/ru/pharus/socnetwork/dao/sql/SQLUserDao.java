@@ -2,15 +2,14 @@ package ru.pharus.socnetwork.dao.sql;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import ru.pharus.socnetwork.dao.DaoFactory;
 import ru.pharus.socnetwork.dao.UserDao;
 import ru.pharus.socnetwork.dao.exception.DAOException;
 import ru.pharus.socnetwork.entity.User;
 import ru.pharus.socnetwork.entity.enums.Role;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SQLUserDao implements UserDao {
     private static final Logger log = LoggerFactory.getLogger(SQLUserDao.class);
@@ -21,19 +20,18 @@ public class SQLUserDao implements UserDao {
         if (user != null) {
             log.debug(String.format("Creating new user %s", user.getLogin()));
 
-            String sql = "INSERT INTO users(login, password, full_name, city, birth_date, register_date, role) VALUES (?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO users(login, password, full_name, birth_date, register_date, role) VALUES (?,?,?,?,?,?)";
             try (Connection conn = factory.getConnection();
                  PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
                 statement.setObject(1, user.getLogin());
                 statement.setObject(2, user.getPassword());
                 statement.setObject(3, user.getFullName());
-                statement.setObject(4, user.getCity());
-                statement.setObject(5, user.getBirthDate());
-                statement.setObject(6, user.getRegisterDate());
-                statement.setObject(7, user.getRole());
+                statement.setObject(4, user.getBirthDate());
+                statement.setObject(5, user.getRegisterDate());
+                statement.setObject(6, user.getRole());
 
-                log.trace("Open connection and statement. Execute insert query");
+                log.trace("Open connection and statement. Execute query: insert user");
                 statement.executeUpdate();
                 user.setId(statement.getGeneratedKeys().getInt(1));
 
@@ -45,7 +43,7 @@ public class SQLUserDao implements UserDao {
             }
         }
 
-        return -1;
+        return 0;
     }
 
     @Override
@@ -54,7 +52,7 @@ public class SQLUserDao implements UserDao {
             log.debug(String.format("Updating user %s", user.getLogin()));
 
             String sql =
-                    "UPDATE users set login = ?, password = ?, full_name = ?, city = ?, birth_date = ?, register_date = ?, role = ?) " +
+                    "UPDATE users set login = ?, password = ?, full_name = ?, birth_date = ?, register_date = ?, role = ?) " +
                             "WHERE id = " + user.getId();
 
             try (Connection conn = factory.getConnection();
@@ -62,10 +60,10 @@ public class SQLUserDao implements UserDao {
                 statement.setObject(1, user.getLogin());
                 statement.setObject(2, user.getPassword());
                 statement.setObject(3, user.getFullName());
-                statement.setObject(4, user.getCity());
-                statement.setObject(5, user.getBirthDate());
-                statement.setObject(6, user.getRegisterDate());
-                statement.setObject(7, user.getRole());
+                statement.setObject(4, user.getBirthDate());
+                statement.setObject(5, user.getRegisterDate());
+                statement.setObject(6, user.getRole());
+                log.trace("Open connection and statement. Execute query: update user");
                 statement.executeUpdate();
             } catch (SQLException e) {
                 log.warn(String.format("SQL error: cannot to update user %s", user.getLogin()), e);
@@ -78,11 +76,13 @@ public class SQLUserDao implements UserDao {
     @Override
     public List<User> getAll() throws DAOException {
         List<User> usersList = new ArrayList<>();
-        String sql = "SELECT id, login, password, full_name, city, birth_date, register_date, role FROM users";
+        String sql = "SELECT id, login, password, full_name, birth_date, register_date, role FROM users";
 
         try (Connection conn = factory.getConnection();
              PreparedStatement statement = conn.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
+
+            log.trace("Open connection and statement. Execute query: select users");
 
             while (resultSet.next()){
                 User user = new User(
@@ -90,16 +90,16 @@ public class SQLUserDao implements UserDao {
                         resultSet.getString("login"),
                         resultSet.getString("password"),
                         resultSet.getString("full_name"),
-                        resultSet.getString("city"),
                         resultSet.getDate("birth_date").toLocalDate(),
-                        resultSet.getDate("register_date").toLocalDate(),
+                        resultSet.getTimestamp("register_date").toLocalDateTime(),
                         Role.valueOf(resultSet.getString("role"))
                 );
                 usersList.add(user);
             }
 
         } catch (SQLException e) {
-
+            log.warn("SQL error: cannot select users", e);
+            throw new DAOException("SQL error: cannot select users", e);
         }
 
         return usersList;

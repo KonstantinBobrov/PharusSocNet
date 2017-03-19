@@ -52,7 +52,6 @@ public class DaoFactory {
         initH2Db(resourcesDbProperties);
     }
 
-    @SuppressWarnings("WeakerAccess")
     public Connection getConnection() throws DAOException{
         log.debug("DaoFactory get connection");
         // TODO: 18.03.2017 AddConnectionPool
@@ -67,6 +66,8 @@ public class DaoFactory {
 
     private void initH2Db(String resourcesDbProperties){
         log.debug("H2DB initialisation from SQL files");
+
+        // TODO: 19.03.2017 Reading from file move to core module
 
         try{
             Path pathSource = Paths.get(resourcesDbProperties + "/h2_sql");

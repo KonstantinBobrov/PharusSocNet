@@ -3,18 +3,25 @@ CREATE TABLE users (
   login VARCHAR(64) UNIQUE NOT NULL,
   password VARCHAR(128) NOT NULL,
   full_name VARCHAR(64),
-  city VARCHAR(64),
   birth_date DATE,
-  register_date DATE,
+  register_date DATETIME,
   role VARCHAR(10)
 );
 
 CREATE TABLE friends (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  'id' INT AUTO_INCREMENT PRIMARY KEY,
   id_user INT,
   id_friend INT,
   FOREIGN KEY (id_user) REFERENCES users (id),
   FOREIGN KEY (id_friend) REFERENCES users (id),
+);
+
+CREATE TABLE messages (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  from_user_id   INT NOT NULL DEFAULT '0',
+  to_user_id   INT NOT NULL DEFAULT '0',
+  message TEXT,
+  post_time DATETIME,
 );
 
 CREATE TABLE cars(

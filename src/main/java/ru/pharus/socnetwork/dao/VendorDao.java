@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface VendorDao {
 
     int create(Vendor vendor) throws DAOException;
-
+    void update(Vendor vendor) throws DAOException;
     void deleteById(int id) throws DAOException;
 
     default Optional<Vendor> getById(int id) throws DAOException{

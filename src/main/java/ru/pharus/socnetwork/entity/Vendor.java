@@ -12,10 +12,19 @@ public class Vendor {
     private int id;
     private String name;
 
+    public Vendor(){
+
+    }
+
+    public Vendor(int  id, String name){
+        this.id = id;
+        this.name = name;
+    }
+
     public int getId(){
         return id;
     }
-    public void setID(int id){
+    public void setId(int id){
         this.id = id;
     }
 
@@ -33,8 +42,7 @@ public class Vendor {
 
         Vendor vendor = (Vendor) o;
 
-        if (id != vendor.id) return false;
-        return name.equals(vendor.name);
+        return id == vendor.id && name.equals(vendor.name);
     }
 
     @Override
