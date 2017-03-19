@@ -10,6 +10,7 @@ CREATE TABLE drivers (
 );
 
 CREATE TABLE friends (
+  id INT AUTO_INCREMENT PRIMARY KEY,
   id_driver INT,
   id_friend INT,
   FOREIGN KEY (id_driver) REFERENCES drivers(id),

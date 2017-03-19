@@ -1,7 +1,7 @@
 package ru.pharus.socnetwork.dao;
 
 import ru.pharus.socnetwork.dao.exception.DAOException;
-import ru.pharus.socnetwork.model.Vendor;
+import ru.pharus.socnetwork.entity.Vendor;
 
 import java.util.List;
 import java.util.Optional;

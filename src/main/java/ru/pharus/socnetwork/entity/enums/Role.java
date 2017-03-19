@@ -1,4 +1,4 @@
-package ru.pharus.socnetwork.model;
+package ru.pharus.socnetwork.entity.enums;
 
 public enum Role {
     BLOCKED,
