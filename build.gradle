@@ -18,7 +18,8 @@
         providedCompile 'org.apache.tomcat:tomcat-api:+'
         
         compile 'ch.qos.logback:logback-classic:+',
-                'com.h2database:h2:+'
+                'com.h2database:h2:+',
+                'org.hibernate:hibernate-validator:+'
 
         compileOnly 'org.projectlombok:lombok:+'
         testCompile 'org.projectlombok:lombok:+'

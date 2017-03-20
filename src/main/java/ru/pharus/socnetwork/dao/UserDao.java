@@ -11,12 +11,15 @@ public interface UserDao {
 
     int create(User user) throws DAOException;
     void update(User user) throws DAOException;
-    List<User> getAll() throws DAOException;
+    void delete(int id) throws DAOException;
+    List<User> getByCriteria(String where) throws DAOException;
 
-    default Optional<User> getById(int id) throws DAOException{
-        return getAll().stream().filter(T -> T.getId() == id)
-                .findAny();
+    default List<User> getAll() throws DAOException{
+        return getByCriteria("");
     }
 
-
+    default User getById(int id) throws DAOException{
+        return getAll().stream().filter(T -> T.getId() == id)
+                .findAny().orElse(null);
+    }
 }

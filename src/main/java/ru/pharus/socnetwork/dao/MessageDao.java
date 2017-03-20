@@ -18,5 +18,5 @@ public interface MessageDao {
         throw new UnsupportedOperationException();
     }
 
-    List<Message> getAllById(int userId) throws DAOException;
+    List<Message> getUserMessages(int user) throws DAOException;
 }

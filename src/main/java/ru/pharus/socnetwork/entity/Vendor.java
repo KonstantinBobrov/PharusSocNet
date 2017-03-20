@@ -1,6 +1,11 @@
 package ru.pharus.socnetwork.entity;
 
 
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  *
  * For example:
@@ -10,6 +15,8 @@ package ru.pharus.socnetwork.entity;
 
 public class Vendor {
     private int id;
+    @NotBlank(message = "Enter vendor name")
+    @Size(min = 1, max = 64)
     private String name;
 
     public Vendor(){

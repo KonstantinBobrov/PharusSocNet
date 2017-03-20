@@ -35,7 +35,7 @@ CREATE TABLE cars(
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT,
   model_id INT NOT NULL,
-  car_year YEAR,
+  car_year INT(4),
   car_number VARCHAR(10),
   FOREIGN KEY (user_id) REFERENCES users (id),
   FOREIGN KEY (model_id) REFERENCES models(id)
