@@ -2,12 +2,9 @@ package ru.pharus.socnetwork.dao.sql;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 import ru.pharus.socnetwork.dao.DaoFactory;
 import ru.pharus.socnetwork.dao.UserDao;
 import ru.pharus.socnetwork.dao.exception.DAOException;
@@ -128,11 +125,11 @@ public class SQLUserDao implements UserDao {
                 usersList.add(user);
             }
 
+            log.debug(String.format("Done. Close connection. Return %d users", usersList.size()));
+            return usersList;
         } catch (SQLException e) {
             log.warn("SQL error: cannot select users", e);
             throw new DAOException("SQL error: cannot select users", e);
         }
-
-        return usersList;
     }
 }

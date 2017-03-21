@@ -3,6 +3,7 @@ package ru.pharus.socnetwork.dao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.pharus.socnetwork.dao.exception.DAOException;
+import ru.pharus.socnetwork.dao.sql.*;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -23,6 +24,8 @@ public class DaoFactory {
     private static final Logger log = LoggerFactory.getLogger(DaoFactory.class);
     private static volatile DaoFactory daoINSTANCE;
 
+    private String dbType = "H2DB";
+    private Boolean initSQLDataFiles = true;
     // TomCat JNDI DataSource does not work here
     // @Resource(name = "jdbc/TestDB")
     private DataSource dataSource;
@@ -49,7 +52,10 @@ public class DaoFactory {
     }
 
     public void init(String resourcesDbProperties) throws DAOException{
-        initH2Db(resourcesDbProperties);
+        if (initSQLDataFiles){
+            if(dbType.equalsIgnoreCase("H2DB"))
+            initH2Db(resourcesDbProperties);
+        }
     }
 
     public Connection getConnection() throws DAOException{
@@ -97,4 +103,53 @@ public class DaoFactory {
             log.error("IOException in", e);
         }
     }
+
+    public UserDao getUserDao() {
+        switch (dbType) {
+            case "MySQL":
+            case "H2DB":
+            default: return new SQLUserDao();
+        }
+    }
+
+    public FriendsDao getFriendsDao() {
+        switch (dbType) {
+            case "MySQL":
+            case "H2DB":
+            default: return new SQLFriendsDao();
+        }
+    }
+
+    public MessageDao getMessageDao() {
+        switch (dbType) {
+            case "MySQL":
+            case "H2DB":
+            default: return new SQLMessageDao();
+        }
+    }
+
+    public PostDao getPostDao() {
+        switch (dbType) {
+            case "MySQL":
+            case "H2DB":
+            default: return new SQLPostDao();
+        }
+    }
+
+    public CarsDao getCarsDao() {
+        switch (dbType) {
+            case "MySQL":
+            case "H2DB":
+            default: return new SQLCarsDao();
+        }
+    }
+
+    public ModelDao getModelDao() {
+        switch (dbType) {
+            case "MySQL":
+            case "H2DB":
+            default: return new SQLModelDao();
+        }
+    }
+
 }

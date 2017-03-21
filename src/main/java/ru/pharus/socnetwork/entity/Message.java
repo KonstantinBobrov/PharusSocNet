@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -15,7 +16,7 @@ public class Message {
     private int id;
     // from_user_id   INT NOT NULL DEFAULT '0',
     @NotNull
-    private int fromUser;
+    private int fromUserId;
     //to_user_id   INT NOT NULL DEFAULT '0',
     @NotNull
     private int toUserId;
@@ -23,4 +24,5 @@ public class Message {
     @NotBlank (message = "Enter message")
     private String message;
     //post_time DATETIME,
+    private LocalDateTime postTime;
 }

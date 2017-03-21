@@ -6,7 +6,6 @@ import ru.pharus.socnetwork.dao.CarsDao;
 import ru.pharus.socnetwork.dao.DaoFactory;
 import ru.pharus.socnetwork.dao.exception.DAOException;
 import ru.pharus.socnetwork.entity.Car;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +35,6 @@ public class SQLCarsDao implements CarsDao {
             log.trace("Open connection and statement. Execute query: insert car");
             statement.executeUpdate();
             model.setId(statement.getGeneratedKeys().getInt(1));
-
             return model.getId();
 
         } catch (SQLException e) {
@@ -47,7 +45,7 @@ public class SQLCarsDao implements CarsDao {
 
     @Override
     public void update(Car model) throws DAOException {
-        if (model == null && model.getId() == 0) {
+        if (model == null || model.getId() == 0) {
             log.warn("Method update got NullPointer user Car entity");
             return;
         }
@@ -74,9 +72,8 @@ public class SQLCarsDao implements CarsDao {
 
     @Override
     public void delete(int id) throws DAOException {
-        if (id < 1) return;
-
         log.debug(String.format("deleting user car with id %d", id));
+        if (id < 1) return;
 
         String sql = "Delete from cars where id=" + id;
 
@@ -90,9 +87,10 @@ public class SQLCarsDao implements CarsDao {
     }
 
     @Override
-    public List<Car> geUserCars(int user) throws DAOException {
+    public List<Car> getUserCars(int userId) throws DAOException {
         log.debug("Get user cars");
-        return getByCriteria("user_id = " + user);
+        if (userId < 1) return new ArrayList<>();
+        return getByCriteria("user_id = " + userId);
     }
 
     @Override
@@ -118,12 +116,10 @@ public class SQLCarsDao implements CarsDao {
                 );
                 list.add(model);
             }
-
+            return list;
         } catch (SQLException e) {
             log.warn("SQL error: cannot select users", e);
             throw new DAOException("SQL error: cannot select users", e);
         }
-
-        return list;
     }
 }

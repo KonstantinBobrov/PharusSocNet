@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import ru.pharus.socnetwork.dao.DaoFactory;
 import ru.pharus.socnetwork.dao.FriendsDao;
 import ru.pharus.socnetwork.dao.exception.DAOException;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,6 +18,7 @@ public class SQLFriendsDao implements FriendsDao {
     @Override
     public void addFriend(int user, int friend) throws DAOException {
         log.debug(String.format("Add friend for user %d", user));
+        if (user < 1 || friend < 1) return;
 
         String sql = "Insert into friends(id_user, id_friend) values(?,?)";
 
@@ -65,8 +65,8 @@ public class SQLFriendsDao implements FriendsDao {
 
             return set;
         } catch (SQLException e) {
-            log.error("SQL error: delete from friends table");
-            throw  new DAOException("SQL error: delete from friends table", e);
+            log.error("SQL error: select from friends table");
+            throw  new DAOException("SQL error: select from friends table", e);
         }
     }
 }

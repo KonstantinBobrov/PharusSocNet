@@ -11,7 +11,7 @@ public interface CarsDao {
     void update(Car model) throws DAOException;
     void delete(int id) throws DAOException;
     List<Car> getByCriteria(String where) throws DAOException;
-    default List<Car> geUserCars(int user) throws DAOException{
+    default List<Car> getUserCars(int user) throws DAOException{
         return getByCriteria("").stream().filter(car -> car.getUserId() == user).collect(Collectors.toList());
     }
 }
