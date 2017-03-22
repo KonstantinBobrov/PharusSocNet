@@ -16,10 +16,12 @@
 
     dependencies {
         providedCompile 'org.apache.tomcat:tomcat-api:+'
+
         
         compile 'ch.qos.logback:logback-classic:+',
                 'com.h2database:h2:+',
-                'org.hibernate:hibernate-validator:+'
+                'org.hibernate:hibernate-validator:+',
+                'org.glassfish.web:javax.servlet.jsp.jstl:+'
 
         compileOnly 'org.projectlombok:lombok:+'
         testCompile 'org.projectlombok:lombok:+'

@@ -50,7 +50,7 @@ public class SQLUserDao implements UserDao {
     @Override
     public void update(User user) throws DAOException {
 
-        if (user == null && user.getId() == 0) {
+        if (user == null || user.getId() == 0) {
             log.warn("Method update got NullPointer User entity");
             return;
         }
@@ -97,7 +97,7 @@ public class SQLUserDao implements UserDao {
     @Override
     public User getById(int id) throws DAOException {
         log.debug(String.format("Get user by user.id %d", id));
-        return getByCriteria(" where id + " + id).stream().findFirst().orElse(null);
+        return getByCriteria(" where id = " + id).stream().findFirst().orElse(null);
     }
 
     public List<User> getByCriteria(String where) throws DAOException {

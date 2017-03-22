@@ -21,4 +21,8 @@ public class UsersService {
     public List<Post> getUserPosts(User user) throws DAOException{
         return postDao.getUserPost(user.getId());
     }
+
+    public User getUserById(int id) throws DAOException {
+        return userDao.getById(id);
+    }
 }

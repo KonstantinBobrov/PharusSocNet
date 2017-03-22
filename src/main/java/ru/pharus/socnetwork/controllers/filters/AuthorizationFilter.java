@@ -2,6 +2,8 @@ package ru.pharus.socnetwork.controllers.filters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.pharus.socnetwork.controllers.LoginController;
+import ru.pharus.socnetwork.service.UsersService;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -16,7 +18,7 @@ import java.io.IOException;
 
 @WebFilter("/user")
 public class AuthorizationFilter implements Filter {
-    static final Logger log = LoggerFactory.getLogger(AuthorizationFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthorizationFilter.class);
 
 
     @Override
@@ -34,10 +36,11 @@ public class AuthorizationFilter implements Filter {
             //allowedRequest = true;
         }
 
-        HttpSession session = httpRequest.getSession();
+        HttpSession session = httpRequest.getSession(true);
         if (session.getAttribute("user_id") == null) {
             log.info(String.format("Session %s not authorized, redirect to /", session.getId()));
             httpResponse.sendRedirect("/");
+            return;
         }
 
         chain.doFilter(request,response);
