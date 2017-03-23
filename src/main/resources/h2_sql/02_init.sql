@@ -15,10 +15,30 @@ INSERT INTO users(login, password, full_name, birth_date, register_date, role)
 VALUES ('vasia@mail.ru', '0000', 'Вася Перов', '1991-04-12', '2017-03-01', 'USER');
 
 INSERT INTO users(login, password, full_name, birth_date, register_date, role)
-VALUES ('vasia5@mail.ru', '0000', 'Вася5 Перов', '1991-04-12', '2017-03-01', 'USER');
+VALUES ('vasia5@mail.ru', '0000', 'Петя нестеров', '1991-04-12', '2017-03-01', 'USER');
+
+INSERT INTO users(login, password, full_name, birth_date, register_date, role)
+VALUES ('vasia6@mail.ru', '0000', 'Никита Хрустов', '1991-04-12', '2017-03-01', 'USER');
+
+INSERT INTO users(login, password, full_name, birth_date, register_date, role)
+VALUES ('vasia7@mail.ru', '0000', 'Лена абетаева', '1991-04-12', '2017-03-01', 'USER');
+
+INSERT INTO users(login, password, full_name, birth_date, register_date, role)
+VALUES ('vasia8@mail.ru', '0000', 'Станислав Соколов', '1991-04-12', '2017-03-01', 'USER');
+
+INSERT INTO users(login, password, full_name, birth_date, register_date, role)
+VALUES ('vasia9@mail.ru', '0000', 'Вася Васечкин', '1991-04-12', '2017-03-01', 'USER');
+
+INSERT INTO users(login, password, full_name, birth_date, register_date, role)
+VALUES ('vasia10@mail.ru', '0000', 'Илья Васечкин', '1991-04-12', '2017-03-01', 'USER');
 
 INSERT INTO friends(id_user, id_friend) VALUES (1,2);
 INSERT INTO friends(id_user, id_friend) VALUES (1,3);
+INSERT INTO friends(id_user, id_friend) VALUES (1,4);
+INSERT INTO friends(id_user, id_friend) VALUES (1,5);
+INSERT INTO friends(id_user, id_friend) VALUES (1,6);
+INSERT INTO friends(id_user, id_friend) VALUES (1,7);
+INSERT INTO friends(id_user, id_friend) VALUES (1,8);
 INSERT INTO friends(id_user, id_friend) VALUES (2,1);
 INSERT INTO friends(id_user, id_friend) VALUES (2,3);
 INSERT INTO friends(id_user, id_friend) VALUES (3,2);

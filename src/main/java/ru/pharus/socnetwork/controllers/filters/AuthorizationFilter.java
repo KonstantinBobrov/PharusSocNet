@@ -16,7 +16,7 @@ import java.io.IOException;
  * Authorization common servlet filter
  */
 
-@WebFilter("/user")
+@WebFilter({"/user", "/friends"})
 public class AuthorizationFilter implements Filter {
     private static final Logger log = LoggerFactory.getLogger(AuthorizationFilter.class);
 
@@ -32,7 +32,7 @@ public class AuthorizationFilter implements Filter {
         //boolean allowedRequest = false;
 
         if(url!=null) {
-            log.debug("user request url mapped to " + url);
+            log.trace("user request url mapped to " + url);
             //allowedRequest = true;
         }
 
@@ -44,6 +44,6 @@ public class AuthorizationFilter implements Filter {
         }
 
         chain.doFilter(request,response);
-        log.debug("Quit from AuthorizationFilter");
+        log.trace("Quit from AuthorizationFilter");
     }
 }

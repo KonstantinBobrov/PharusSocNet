@@ -57,6 +57,23 @@ div#smallogo, div#smallava {
 	vertical-align: middle;
 }
 
+.mainfriends {
+	display:inline-block; 
+	border-radius: 24px; 
+	background-size: 100% auto; 
+	height:50px; 
+	width:50px; 
+	vertical-align: middle;
+}
+
+.tablistfr {
+	padding:10;
+}
+.tablistfr td {
+	width:33%;
+	text-align:center;
+}
+
 div#searchinhead input{
 	border: none;
 	border-radius: 15px; 
@@ -132,7 +149,7 @@ div#addfriend{
 div#listfriends{
 	border-radius: 7px;
 	background-color: white;
-	height: 220px;
+	min-height: 220px;
 }
 
 div#rightpanelbigspace, div#rightpanelsmallspace{
@@ -152,6 +169,13 @@ div#usercarsinfo{
 }
 
 div#postinfo{
+	border-radius: 7px;
+	background-color: white;
+}
+
+div#friendsmodule{
+	width:100%;
+	min-height:500px;
 	border-radius: 7px;
 	background-color: white;
 }
