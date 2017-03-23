@@ -9,7 +9,7 @@ public class ShowFriends extends BodyTagSupport {
     @Override
     @SneakyThrows
     public int doStartTag() throws JspException {
-        pageContext.getOut().print("<b> Тег с телом начало");
+        pageContext.getOut().print("<b> Тег с телом начало</b>");
         return EVAL_BODY_INCLUDE;
     }
 
@@ -17,14 +17,14 @@ public class ShowFriends extends BodyTagSupport {
     @Override
     @SneakyThrows
     public int doAfterBody() throws JspException {
-        pageContext.getOut().print("<br><b> Тут само тело");
+        pageContext.getOut().print("<br><b> Тут само тело<b>");
         return SKIP_BODY;
     }
 
     @Override
     @SneakyThrows
     public int doEndTag() throws JspException {
-        pageContext.getOut().print("<br><b> тут конец");
+        pageContext.getOut().print("<br><b> тут конец</b>");
         return SKIP_BODY;
     }
 }

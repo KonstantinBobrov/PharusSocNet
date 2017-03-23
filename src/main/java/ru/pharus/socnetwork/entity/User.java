@@ -28,6 +28,7 @@ public class User {
     private LocalDate birthDate;
     private LocalDateTime registerDate;
     private Role role;
+    private String avatar;
 
     // TODO: 19.03.2017 Equals and Heshcode
 
@@ -93,6 +94,9 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    public String getAvatar() {return avatar;}
+    public void setAvatar(String avatar){ this.avatar = avatar;}
 
 
 }

@@ -2,6 +2,14 @@
 <%@ page import="ru.pharus.socnetwork.entity.Post" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://pharus.ru/taglibs" prefix="ptags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<jsp:useBean id="logUser" type="ru.pharus.socnetwork.entity.User" scope="request"/>
+<jsp:useBean id="showUser" type="ru.pharus.socnetwork.entity.User" scope="request"/>
+<jsp:useBean id="listPosts" type="java.util.List" scope="request"/>
+<jsp:useBean id="listFriends" type="java.util.List" scope="request"/>
+<jsp:useBean id="listCars" type="java.util.List" scope="request"/>
 
 <html>
 <head>
@@ -15,7 +23,7 @@
 <div id="header">
     <div id="gohome"><a href="/"><div id="smallogo" style="background-image:url('img/logo.png');"></div></a></div>
     <div id="searchinhead"><input type="text" autocomplete="off" placeholder="Поиск"><div id="smallava"></div></div>
-    <div id="logout" ><a href="/logout">Петр &nbsp <div id="smallava" style="background-image:url('img/ava/1.jpg');"></div> Logout </a></div>
+    <div id="logout" ><a href="/logout">Петр &nbsp <div id="smallava" style="background-image:url('img/ava/${logUser.avatar}');"></div> Logout </a></div>
 </div>
 
 <div id="none"></div>
@@ -61,7 +69,7 @@
     <div id="rightpanel">
         <div id="rightpanelsmall">
             <div id="avatarcontainter">
-                <div id="bavatar" style="background-image:url('img/ava/1.jpg')"></div>
+                <div id="bavatar" style="background-image:url('img/ava/${showUser.avatar}')"></div>
             </div>
             <div id="rightpanelsmallspace"><!-- blank --></div>
             <div id="addfriend">
@@ -71,7 +79,8 @@
             <div id="rightpanelsmallspace"><!-- blank --></div>
 
             <div id="listfriends">
-                список друзей
+                Подписок (${listFriends.size()})
+               <ptags:showfriends/>
             </div>
         </div>
 
@@ -80,19 +89,21 @@
 
         <div id="rightpanelbig">
             <div id="userinfo">
-                информация о юзере
+                ${showUser.id}<br>
+                ${showUser.fullName}<br>
+                ${showUser.birthDate}<br>
+                ${showUser.registerDate}<br>
             </div>
 
             <div id="rightpanelbigspace"><!-- blank --></div>
             <div id="usercarsinfo">
-                информация о машинах
+                Ваш гараж (${listCars.size()})
             </div>
 
             <div id="rightpanelbigspace"><!-- blank --></div>
 
             <div id="postinfo">
-
-                посты
+                Ваши посты (${listPosts.size()})
 
             </div>
         </div>

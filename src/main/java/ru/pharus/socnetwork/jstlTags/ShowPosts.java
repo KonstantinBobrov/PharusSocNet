@@ -8,6 +8,7 @@ import java.io.IOException;
 public class ShowPosts extends TagSupport {
     @Override
     public int doStartTag() throws JspException {
+
         JspWriter out = pageContext.getOut();
 
         try {

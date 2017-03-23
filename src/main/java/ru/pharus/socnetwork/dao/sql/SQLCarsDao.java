@@ -90,7 +90,7 @@ public class SQLCarsDao implements CarsDao {
     public List<Car> getUserCars(int userId) throws DAOException {
         log.debug("Get user cars");
         if (userId < 1) return new ArrayList<>();
-        return getByCriteria("user_id = " + userId);
+        return getByCriteria(" where user_id = " + userId);
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.pharus.socnetwork.dao.exception.DAOException;
 import ru.pharus.socnetwork.entity.User;
+import ru.pharus.socnetwork.service.CarService;
 import ru.pharus.socnetwork.service.UsersService;
 
 import javax.servlet.ServletConfig;
@@ -16,6 +17,7 @@ import java.io.IOException;
 public class UserController extends javax.servlet.http.HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private UsersService userService;
+    private CarService carService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -23,6 +25,7 @@ public class UserController extends javax.servlet.http.HttpServlet {
         //??? True dao layer injection?
         //service = (UsersService) config.getServletContext().getAttribute("UsersService()");
         userService = new UsersService();
+        carService = new CarService();
     }
 
 
@@ -34,16 +37,15 @@ public class UserController extends javax.servlet.http.HttpServlet {
         HttpSession session = request.getSession();
         try {
             User currUser = userService.getUserById((int) request.getSession().getAttribute("user_id"));
-            request.setAttribute("currentUser", currUser);
-            request.setAttribute("Posts", userService.getUserPosts(currUser));
-
+            request.setAttribute("logUser", currUser);
+            request.setAttribute("showUser", currUser);
+            request.setAttribute("listPosts", userService.getUserPosts(currUser));
+            request.setAttribute("listFriends", userService.getUserFriends(currUser));
+            request.setAttribute("listCars", carService.getUserCars(currUser));
             request.getRequestDispatcher("/WEB-INF/jsp/user.jsp").forward(request,response);
         }catch (DAOException e){
             // TODO: 22.03.2017 перенаправить на error page jsp 
            response.sendRedirect("/");
         }
-
-
-
     }
 }

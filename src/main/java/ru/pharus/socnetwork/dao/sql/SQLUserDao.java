@@ -122,6 +122,11 @@ public class SQLUserDao implements UserDao {
                         resultSet.getTimestamp("register_date").toLocalDateTime(),
                         Role.valueOf(resultSet.getString("role"))
                 );
+
+                // TODO: 23.03.2017 пока аватарку берем по последней цифре ID
+                String ava = String.valueOf(user.getId());
+                user.setAvatar(String.valueOf(ava.charAt(ava.length()-1))+".jpg");
+
                 usersList.add(user);
             }
 

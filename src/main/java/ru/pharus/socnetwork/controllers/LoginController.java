@@ -46,8 +46,12 @@ public class LoginController extends HttpServlet {
         if ("/login".equalsIgnoreCase(request.getServletPath())) {
             String login = request.getParameter("login_email");
             String password = request.getParameter("password");
+            log.debug(String.format("Try to login with login: %s and password: %s", login, password));
 
-            log.debug(String.format("User: %s Password: %s", login, password));
+
+            //UsersService.validateLogin(login);
+
+
             try {
                 User currUser = service.getUserByLogin(login);
                 if (currUser == null) request.getRequestDispatcher("/index.jsp").forward(request, response);
