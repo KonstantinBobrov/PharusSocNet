@@ -66,6 +66,15 @@ div#smallogo, div#smallava {
 	vertical-align: middle;
 }
 
+.smalllogo {
+	display:inline-block; 
+	border-radius: 12px; 
+	background-size: 100% auto; 
+	height:25px; 
+	width:25px; 
+	vertical-align: middle;
+}
+
 .tablistfr {
 	padding:10;
 }
@@ -141,9 +150,18 @@ div#bavatar{
 }
 
 div#addfriend{
+	text-align: center;
+	padding: 10px;
 	border-radius: 7px;
 	background-color: white;
-	height: 30px;
+}
+
+.flatbutton {
+	padding: 3px;
+	background-color:#6888ad;
+	color:#fff;
+	border-radius: 3px;
+	width:200px;
 }
 
 div#listfriends{
@@ -163,12 +181,14 @@ div#userinfo{
 }
 
 div#usercarsinfo{
+	padding: 10px;
 	border-radius: 7px;
 	background-color: white;
-	height: 120px;
+
 }
 
 div#postinfo{
+	padding: 10px;
 	border-radius: 7px;
 	background-color: white;
 }

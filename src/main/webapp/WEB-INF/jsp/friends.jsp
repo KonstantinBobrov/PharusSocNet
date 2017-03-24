@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <jsp:useBean id="logUser" type="ru.pharus.socnetwork.entity.User" scope="request"/>
-<jsp:useBean id="showUser" type="ru.pharus.socnetwork.entity.User" scope="request"/>
+<jsp:useBean id="infoUser" type="ru.pharus.socnetwork.entity.User" scope="request"/>
 <jsp:useBean id="listFriends" type="java.util.List" scope="request"/>
 
 <fmt:setLocale value="${not empty sessionScope['lang'] ? sessionScope['lang'] : 'Ru'}" />
@@ -26,37 +26,9 @@
 
 <div id="none"></div>
 <div id="contentconteiner">
-    <div id="leftpanel">
-        <!--Левая панель-->
-        <div id="menu">
-            <ol class="listmenu">
-                <li>
-                    <a href="/user" class="left_row">
-                        <span class="left_label inl_bl">Моя Страница</span>
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/feed" class="left_row">
-                        <span class="left_label inl_bl">Новости</span>
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/im" class="left_row">
-                        <span class="left_label inl_bl">Сообщения</span>
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/friends" class="left_row">
-                        <span class="left_label inl_bl">Друзья</span>
-                        </span>
-                    </a>
-                </li>
-            </ol>
-        </div>
-    </div>
+
+    <jsp:include page="template/leftmenu.jsp"/>
+
     <div id="rightpanel">
         <div id="rightpanelbig">
             <div id="friendsmodule">
@@ -67,6 +39,7 @@
 
         <div id="rightpanelspace"></div>
         <div id="rightpanelsmall"></div>
+        ${infoUser.fullName}
     </div>
 </div>
 </body>

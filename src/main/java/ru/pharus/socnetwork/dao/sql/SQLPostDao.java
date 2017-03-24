@@ -33,10 +33,11 @@ public class SQLPostDao implements PostDao{
 
             log.trace("Open connection and statement. Execute query: insert post");
             statement.executeUpdate();
-            message.setId(statement.getGeneratedKeys().getInt(1));
 
+            try(ResultSet rs = statement.getGeneratedKeys()){
+                if(rs.next()) message.setId(rs.getInt(1));
+            }
             return message.getId();
-
         } catch (SQLException e) {
             log.warn(String.format("SQL error: cannot add post %s", message.getTitle()), e);
             throw new DAOException("SQL error: cannot add post ", e);
@@ -50,14 +51,14 @@ public class SQLPostDao implements PostDao{
             return;
         }
 
-        log.debug(String.format("Updating user post with title %s", message.getTitle()));
+        log.debug(String.format("Updating user post with id", message.getId()));
 
         String sql = "UPDATE posts set title = ?, post = ? WHERE id = " + message.getId();
 
         try (Connection conn = factory.getConnection();
              PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setObject(1, message.getTitle());
-            statement.setObject(2, message.getTitle());
+            statement.setObject(2, message.getText());
             log.trace("Open connection and statement. Execute query: update user post");
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -84,11 +85,16 @@ public class SQLPostDao implements PostDao{
     }
 
     @Override
+    public Post getById(int id) throws DAOException {
+        return getByCriteria(" where id="+id).stream().findFirst().orElse(null);
+    }
+
+    @Override
     public List<Post> getByCriteria(String where) throws DAOException {
         log.debug(String.format("Get user posts by criteria %s", where));
         List<Post> list = new ArrayList<>();
 
-        String sql = "SELECT id, user_id, title, post FROM posts " + where;
+        String sql = String.format("SELECT id, user_id, title, post FROM posts %s ORDER BY id DESC", where);
 
         try (Connection conn = factory.getConnection();
              PreparedStatement statement = conn.prepareStatement(sql);

@@ -18,9 +18,10 @@ public class Post {
     @NotNull
     private int userId;
 //    title VARCHAR(255) NOT NULL,
-    @NotBlank(message = "Enter post title")
     @Size(max = 255)
     private String title;
 //    post TEXT,
+    @NotBlank(message = "Please enter text")
+    @Size(max = 1800)
     private String text;
 }

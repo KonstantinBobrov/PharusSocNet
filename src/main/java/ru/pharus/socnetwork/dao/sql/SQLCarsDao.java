@@ -34,9 +34,11 @@ public class SQLCarsDao implements CarsDao {
 
             log.trace("Open connection and statement. Execute query: insert car");
             statement.executeUpdate();
-            model.setId(statement.getGeneratedKeys().getInt(1));
-            return model.getId();
+            try(ResultSet rs = statement.getGeneratedKeys()){
+                if(rs.next()) model.setId(rs.getInt(1));
+            }
 
+            return model.getId();
         } catch (SQLException e) {
             log.warn(String.format("SQL error: cannot add car for user %s", model.getUserId()), e);
             throw new DAOException("SQL error: cannot add car for user", e);

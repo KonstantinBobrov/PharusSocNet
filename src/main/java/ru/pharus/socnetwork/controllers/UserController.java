@@ -3,6 +3,7 @@ package ru.pharus.socnetwork.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.pharus.socnetwork.dao.exception.DAOException;
+import ru.pharus.socnetwork.entity.Post;
 import ru.pharus.socnetwork.entity.User;
 import ru.pharus.socnetwork.service.CarService;
 import ru.pharus.socnetwork.service.UsersService;
@@ -20,8 +21,6 @@ public class UserController extends javax.servlet.http.HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private UsersService userService;
     private CarService carService;
-    private User loginedUser;
-    private User showUser;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -40,20 +39,24 @@ public class UserController extends javax.servlet.http.HttpServlet {
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         HttpSession session = request.getSession();
         String url = request.getServletPath();
+        User loginUser;
+        User infoUser;
 
         try {
-            loginedUser = userService.getUserById((int) session.getAttribute("user_id"));
-            if (loginedUser == null) {
+            loginUser = userService.getUserById((int) session.getAttribute("user_id"));
+            if (loginUser == null) {
                 response.sendRedirect("/error404");
             }
+            request.setAttribute("logUser", loginUser);
+            request.setAttribute("infoUser", loginUser);
+
             if (request.getParameter("id") != null) {
-                showUser = userService.getUserById(Integer.parseInt(request.getParameter("id")));
-                if (showUser == null) {
+                infoUser = userService.getUserById(Integer.parseInt(request.getParameter("id")));
+                if (infoUser == null) {
                     response.sendRedirect("/error404");
                     return;
                 }
-            } else {
-                showUser = loginedUser;
+                request.setAttribute("infoUser", infoUser);
             }
         } catch (DAOException e) {
             log.error("Error in user controller service ", e);
@@ -70,24 +73,72 @@ public class UserController extends javax.servlet.http.HttpServlet {
     }
 
     private void goToUserController(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+        User logUser = (User) request.getAttribute("logUser");
+        User infoUser = (User) request.getAttribute("infoUser");
+
+        String cardel = request.getParameter("cardel");
+        String delpost = request.getParameter("delpost");
+        String addpost = request.getParameter("addpost");
+        String editpost = request.getParameter("editpost");
+        String subscribe = request.getParameter("subscribe");
+        String unsubscribe = request.getParameter("unsubscribe");
+
         try {
-            request.setAttribute("logUser", loginedUser);
-            request.setAttribute("showUser", showUser);
-            request.setAttribute("listPosts", userService.getUserPosts(showUser));
-            request.setAttribute("listFriends", userService.getUserFriends(showUser));
-            request.setAttribute("listCars", carService.getUserCars(showUser));
+            // запрос на довбавление поста
+            if (null != addpost && !addpost.isEmpty()) {
+                Post post = new Post();
+                post.setText(addpost);
+                post.setUserId(logUser.getId());
+                String postid = request.getParameter("postid");
+                if (postid != null && !addpost.isEmpty()) {
+                    post.setId(Integer.parseInt(postid));
+                    userService.editPost(post);
+                }else {
+                    userService.addPost(post);
+                }
+            }
+            // запрос на удаление поста
+            if (null != delpost && !delpost.isEmpty()) {
+                // TODO: 24.03.2017 добавть проверку на невозможность удаления чужого поста
+                userService.deletePost(Integer.parseInt(delpost));
+            }
+            // запрос на редактирование поста
+            if (null != editpost) {
+                Post post = userService.getPostById(Integer.parseInt(editpost));
+                if (null != post)
+                    request.setAttribute("editPost", post);
+            }
+            // запрос на удаление авто
+            if (null != cardel && !cardel.isEmpty()) {
+                // TODO: 24.03.2017 добавть проверку на невозможность удаления чужого авто
+                carService.deleteCar(Integer.parseInt(cardel));
+            }
+            // запрос на подписку
+            if (null != subscribe) {
+                userService.subscribe(logUser, infoUser);
+            }
+            // запрос на отписку
+            if (null != unsubscribe) {
+                userService.unsubscribe(logUser, infoUser);
+            }
+
+            // Занесение атрибутов в ответ
+            request.setAttribute("listPosts", userService.getUserPosts(infoUser));
+            request.setAttribute("listFriends", userService.getUserFriends(infoUser));
+            request.setAttribute("listCars", carService.getUserCars(infoUser));
+            request.setAttribute("isSubscribed", userService.isSubcribed(logUser, infoUser));
             request.getRequestDispatcher("/WEB-INF/jsp/user.jsp").forward(request, response);
         } catch (DAOException e) {
-            log.error("Error in user controller database service ", e);
-            response.sendRedirect("/error404");
+            log.error("Error in user controller", e);
         }
     }
 
-    private void goToFriendsController(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+    private void goToFriendsController(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        User logUser = (User) request.getAttribute("logUser");
+        User infoUser = (User) request.getAttribute("infoUser");
+
         try {
-            request.setAttribute("logUser", loginedUser);
-            request.setAttribute("showUser", showUser);
-            request.setAttribute("listFriends", userService.getUserFriends(showUser));
+            request.setAttribute("listFriends", userService.getUserFriends(infoUser));
             request.getRequestDispatcher("/WEB-INF/jsp/friends.jsp").forward(request, response);
         } catch (DAOException e) {
             log.error("Error in friends controller database service ", e);

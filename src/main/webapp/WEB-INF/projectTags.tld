@@ -14,12 +14,16 @@
         <tag-class>ru.pharus.socnetwork.jstlTags.ShowPosts</tag-class>
         <body-content>empty</body-content>
         <attribute>
-            <name>set</name>
+            <name>list</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>max</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
-
     <tag>
         <name>showfriends</name>
         <tag-class>ru.pharus.socnetwork.jstlTags.ShowFriends</tag-class>
@@ -45,7 +49,61 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
-
+    <tag>
+        <name>showcars</name>
+        <tag-class>ru.pharus.socnetwork.jstlTags.ShowCars</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>list</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>max</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <name>Button</name>
+        <tag-class>ru.pharus.socnetwork.jstlTags.Button</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>caption</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>url</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <name>SubscribeButton</name>
+        <tag-class>ru.pharus.socnetwork.jstlTags.SubscribeButton</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>caption</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>uncaption</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <name>MessageButton</name>
+        <tag-class>ru.pharus.socnetwork.jstlTags.MessageButton</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>caption</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
     <!-- Invoke 'Generate' action to add tags or functions -->
 
 </taglib>

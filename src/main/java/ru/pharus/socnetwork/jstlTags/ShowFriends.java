@@ -11,14 +11,14 @@ import java.util.List;
 public class ShowFriends extends TagSupport {
     private static final Logger log = LoggerFactory.getLogger(ShowFriends.class);
     private List<User> list;
-    private User showUser;
+    private User infoUser;
     private String title = "Info";
     private int cols = 3;
     private int max;
 
     public void setList(List list) {
         //Collections.list(pageContext.getRequest().getAttributeNames()).forEach(System.out::println);
-        showUser = (User) pageContext.getRequest().getAttribute("showUser");
+        infoUser = (User) pageContext.getRequest().getAttribute("infoUser");
         this.list = list;
     }
 
@@ -41,7 +41,7 @@ public class ShowFriends extends TagSupport {
         StringBuilder html = new StringBuilder();
 
         html.append("<table class = 'tablistfr'><tr><td colspan=2>");
-        html.append(String.format("<a href='/friends?id=%s&selection=all'> %s </td><td> %s </td>",showUser.getId(), title, list.size()));
+        html.append(String.format("<a href='/friends?id=%s&selection=all'> %s </td><td> %s </td>", infoUser.getId(), title, list.size()));
         for(int i = 0; i < max; ){
             html.append("</tr><tr>");
             for(int j = 0; j < cols; j++){

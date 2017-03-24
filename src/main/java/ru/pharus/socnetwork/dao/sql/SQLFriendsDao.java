@@ -26,6 +26,7 @@ public class SQLFriendsDao implements FriendsDao {
             PreparedStatement statement = conn.prepareStatement(sql)){
             statement.setObject(1, user);
             statement.setObject(2, friend);
+            statement.executeUpdate();
         } catch (SQLException e) {
             log.error("SQL error: insert into friends table");
             throw  new DAOException("SQL error: insert into friends table", e);
@@ -35,12 +36,14 @@ public class SQLFriendsDao implements FriendsDao {
 
     @Override
     public void removeFriend(int user, int friend) throws DAOException {
-        log.debug(String.format("Add friend for user %d", user));
+        log.debug(String.format("Remove friend for user %d", user));
 
         String sql = "DELETE from friends WHERE id_user = ? AND id_friend = ?";
 
         try(Connection conn = factory.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql)){
+            statement.setObject(1,user);
+            statement.setObject(2,friend);
             statement.executeUpdate();
         } catch (SQLException e) {
             log.error("SQL error: delete from friends table");

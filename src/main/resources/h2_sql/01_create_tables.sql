@@ -45,7 +45,7 @@ CREATE TABLE cars(
 CREATE TABLE posts(
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT,
-  title VARCHAR(255) NOT NULL,
+  title VARCHAR(255),
   post TEXT,
   FOREIGN KEY (user_id) REFERENCES users (id)
 );

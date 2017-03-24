@@ -10,6 +10,7 @@ public interface PostDao {
     void update(Post message) throws DAOException;
     void delete(int id) throws DAOException;
 
+    Post getById(int id) throws DAOException;
     List<Post> getByCriteria(String where) throws DAOException;
     List<Post> getUserPost(int user) throws DAOException;
 }

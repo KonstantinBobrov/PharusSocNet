@@ -16,24 +16,22 @@ import java.io.IOException;
  * Authorization common servlet filter
  */
 
-@WebFilter({"/user", "/friends"})
+@WebFilter({"/user", "/friends", "/edit"})
 public class AuthorizationFilter implements Filter {
     private static final Logger log = LoggerFactory.getLogger(AuthorizationFilter.class);
 
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
-        log.debug("Enter to AuthorizationFilter");
+        log.trace("Enter to AuthorizationFilter");
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        String url = httpRequest.getServletPath();
-        //boolean allowedRequest = false;
 
+        //boolean allowedRequest = false;
+        String url = httpRequest.getServletPath();
         if(url!=null) {
             log.trace("user request url mapped to " + url);
-            //allowedRequest = true;
         }
 
         HttpSession session = httpRequest.getSession(true);

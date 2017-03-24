@@ -37,10 +37,10 @@ public class SQLUserDao implements UserDao {
 
             log.trace("Open connection and statement. Execute query: insert user");
             statement.executeUpdate();
-            user.setId(statement.getGeneratedKeys().getInt(1));
-
+            try(ResultSet rs = statement.getGeneratedKeys()){
+                if(rs.next()) user.setId(rs.getInt(1));
+            }
             return user.getId();
-
         } catch (SQLException e) {
             log.warn(String.format("SQL error: cannot to create new user %s", user.getLogin()), e);
             throw new DAOException("SQL error: cannot to create new user", e);

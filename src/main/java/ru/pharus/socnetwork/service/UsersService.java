@@ -31,14 +31,41 @@ public class UsersService {
 
     public List<User> getUserFriends(User currUser) throws DAOException {
         // будет замечательно если заработает :)
-        List<User> userList = friendsDao.getUserFriendsId(currUser.getId()).parallelStream().map(id -> {
-            User user = new User();
+        return friendsDao.getUserFriendsId(currUser.getId()).parallelStream().map(id -> {
+            User u = new User();
             try {
-                user = userDao.getById(id);
+                u = userDao.getById(id);
             }catch (DAOException e){
+            } return u;})
+                .collect(Collectors.toList());
+    }
 
-            } return user;}).collect(Collectors.toList());
+    public void deletePost(int id) throws DAOException{
+        postDao.delete(id);
+    }
 
-        return userList;
+    public void addPost(Post post) throws DAOException{
+        post.setTitle("");
+        postDao.create(post);
+    }
+
+    public Post getPostById(int id) throws DAOException {
+        return postDao.getById(id);
+    }
+
+    public void editPost(Post post) throws DAOException {
+        post.setTitle("");
+        postDao.update(post);
+    }
+
+    public boolean isSubcribed(User user, User infoUser) throws DAOException {
+        return  friendsDao.getUserFriendsId(user.getId()).contains(infoUser.getId());
+    }
+
+    public void subscribe(User user1, User user2) throws DAOException {
+        friendsDao.addFriend(user1.getId(), user2.getId());
+    }
+    public void unsubscribe(User user1, User user2) throws DAOException {
+        friendsDao.removeFriend(user1.getId(), user2.getId());
     }
 }

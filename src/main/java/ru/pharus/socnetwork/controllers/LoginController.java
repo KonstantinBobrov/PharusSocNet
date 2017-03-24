@@ -2,6 +2,7 @@ package ru.pharus.socnetwork.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.pharus.socnetwork.core.Security;
 import ru.pharus.socnetwork.dao.exception.DAOException;
 import ru.pharus.socnetwork.entity.User;
 import ru.pharus.socnetwork.service.UsersService;
@@ -49,15 +50,18 @@ public class LoginController extends HttpServlet {
             log.debug(String.format("Try to login with login: %s", login));
 
 
-            //UsersService.validateLogin(login);
+            // TODO: 24.03.2017 валидация
 
 
             try {
-                User currUser = service.getUserByLogin(login);
-                if (currUser == null) request.getRequestDispatcher("/index.jsp").forward(request, response);
+                User tmpUser = service.getUserByLogin(login);
+                if (tmpUser == null) request.getRequestDispatcher("/index.jsp").forward(request, response);
                 else {
-                    log.info(String.format("User %s logged and going to user page", currUser.getFullName()));
-                    session.setAttribute("user_id", currUser.getId());
+                    System.out.println(Security.generateHash("123", "123"));
+
+                    User loginedUser = tmpUser;
+                    log.info(String.format("User %s logged and going to user page", loginedUser.getFullName()));
+                    session.setAttribute("user_id", loginedUser.getId());
                     response.sendRedirect("/user");
                     return;
                 }
