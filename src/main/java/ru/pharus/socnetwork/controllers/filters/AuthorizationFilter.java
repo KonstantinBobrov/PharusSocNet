@@ -13,14 +13,18 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Authorization common servlet filter
+ *  Security authorization filter
+ *
  */
 
-@WebFilter({"/user", "/friends", "/edit"})
+@WebFilter({"/user", "/friends", "/edit", "/feed"})
 public class AuthorizationFilter implements Filter {
     private static final Logger log = LoggerFactory.getLogger(AuthorizationFilter.class);
 
-
+    /**
+     * Method checking <code>user_id</code> attribute in session scope
+     * redirect to main if attribute invalid
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         log.trace("Enter to AuthorizationFilter");

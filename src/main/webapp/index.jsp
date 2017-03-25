@@ -58,7 +58,7 @@
         <input type="password" name="regPassword" placeholder="<fmt:message key="rpasswordplaceholder"/>" required/>
       </li>
       <li>
-        <input type="text" name="regFullName" value="${user.fullName}" placeholder="<fmt:message key="rnameplaceholder"/>" required/>
+        <input type="text" name="regFullName" value="${user.fullName}" placeholder="<fmt:message key="rnameplaceholder"/>" pattern="[A-z А-я]{4,30}" required/>
       </li>
       <!-- <li>
           <input type="Date" name="full_name"/>

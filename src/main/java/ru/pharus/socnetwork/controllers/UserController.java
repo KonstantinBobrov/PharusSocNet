@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-@WebServlet({"/user", "/id*", "/friends", "/edit"})
+@WebServlet({"/user", "/id*", "/friends", "/edit", "/feed"})
 public class UserController extends javax.servlet.http.HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private UsersService userService;
@@ -36,21 +36,23 @@ public class UserController extends javax.servlet.http.HttpServlet {
     }
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
         doGet(request, response);
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+        // Deleting oldest error messages
         request.removeAttribute("errEditProfile");
         request.removeAttribute("errEditPost");
         request.removeAttribute("errEditCars");
 
-        request.setCharacterEncoding("utf-8");
         HttpSession session = request.getSession();
         String url = request.getServletPath();
-        User loginUser;
-        User infoUser;
+
         try {
-            loginUser = userService.getUserById((int) session.getAttribute("user_id"));
+            // Getting information about logged user
+            User loginUser = userService.getUserById((int) session.getAttribute("user_id"));
             if (loginUser == null) {
                 log.trace(String.format("User with id %s not found. Redirect to error page", session.getAttribute("user_id")));
                 response.sendRedirect("/error404");
@@ -58,8 +60,9 @@ public class UserController extends javax.servlet.http.HttpServlet {
             request.setAttribute("logUser", loginUser);
             request.setAttribute("infoUser", loginUser);
 
+            // Getting information about required user
             if (request.getParameter("id") != null) {
-                infoUser = userService.getUserById(Integer.parseInt(request.getParameter("id")));
+                User infoUser = userService.getUserById(Integer.parseInt(request.getParameter("id")));
                 if (infoUser == null) {
                     log.trace(String.format("User with id %s not found. Redirect to error page", session.getAttribute("user_id")));
                     response.sendRedirect("/error404");
@@ -103,7 +106,6 @@ public class UserController extends javax.servlet.http.HttpServlet {
                 post.setText(addpost);
                 post.setUserId(logUser.getId());
                 String postid = request.getParameter("postid");
-
                 String err = userService.validatePost(post);
                 if (err.isEmpty()) {
                     try {
@@ -118,8 +120,6 @@ public class UserController extends javax.servlet.http.HttpServlet {
                     }
                 }
                 request.getSession().setAttribute("errEditPost", err);
-
-
             }
             // запрос на удаление поста
             if (null != delpost && !delpost.equals("")) {
@@ -177,41 +177,38 @@ public class UserController extends javax.servlet.http.HttpServlet {
     }
 
     private void goToEditController(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User logUser = (User) request.getAttribute("logUser");
-        User user = logUser;
+        User editUser = (User) request.getAttribute("logUser");
         String err;
         if (request.getParameter("regLoginEmail") != null) {
-            user.setPassword(request.getParameter("regPassword"));
-            user.setFullName(request.getParameter("regFullName"));
+            editUser.setPassword(request.getParameter("regPassword"));
+            editUser.setFullName(request.getParameter("regFullName"));
             String birthDate = request.getParameter("birthDate");
             if (birthDate != null && !birthDate.isEmpty()) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
                 LocalDate date = LocalDate.parse(request.getParameter("birthDate"), formatter);
-                user.setBirthDate(date);
+                editUser.setBirthDate(date);
             }
             //Validation user in Hibernate Validator
-            err = userService.validate(user);
+            err = userService.validate(editUser);
             if (err.isEmpty()) {
                 try {
-                    user.setPassword(Security.generateHash(user.getPassword(), Security.SOME_SALT));
-                    userService.updateUser(user);
+                    editUser.setPassword(Security.generateHash(editUser.getPassword(), Security.SOME_SALT));
+                    userService.updateUser(editUser);
                     response.sendRedirect("/user");
                     return;
                 } catch (DAOException e) {
-                    log.error(String.format("Error update user %s", user.getLogin()));
+                    log.error(String.format("Error update user %s", editUser.getLogin()));
                 }
             }
+            // if contain errors pass to JSP
             request.getSession().setAttribute("errEditProfile", err);
         }
-
-        request.setAttribute("user", user);
+        request.setAttribute("user", editUser);
         request.getRequestDispatcher("/WEB-INF/jsp/edit.jsp").forward(request, response);
     }
 
     private void goToFriendsController(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //User logUser = (User) request.getAttribute("logUser");
         User infoUser = (User) request.getAttribute("infoUser");
-
         try {
             request.setAttribute("listFriends", userService.getUserFriends(infoUser));
             request.getRequestDispatcher("/WEB-INF/jsp/friends.jsp").forward(request, response);

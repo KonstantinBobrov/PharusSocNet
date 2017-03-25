@@ -32,7 +32,7 @@
                                placeholder="<fmt:message key="rpasswordplaceholder"/>" required/>
                     </li>
                     <li>
-                        <input type="text" name="regFullName" value="${user.fullName}"
+                        <input type="text" name="regFullName" value="${user.fullName}" pattern='[A-z А-я]{4,30}'
                                placeholder="<fmt:message key="rnameplaceholder"/>" required/>
                     </li>
 

@@ -18,6 +18,13 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
+/**
+ * First web servlet who mapped on root domain /
+ *
+ * Works on Login to the system, logout and registration
+ * By default anonymous user redirect to index.jsp
+ */
+
 @WebServlet({"", "/login", "/logout", "/registration"})
 public class LoginController extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
@@ -31,6 +38,16 @@ public class LoginController extends HttpServlet {
         service = new UsersService();
     }
 
+    /**
+     * Main query processing method
+     *
+     * /registration - creating new user after valid registration and redirect to /edit page in {@link UserController}
+     *
+     * /login - validate login and password hash and redirect to /user page in {@link UserController}
+     *
+     * /logout - invalidate session and send redirect to main paige
+     *
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
@@ -42,6 +59,7 @@ public class LoginController extends HttpServlet {
 
         ResourceBundle bundle = ResourceBundle.getBundle("localization");
 
+        // Logout - clearing all session data
         if ("/logout".equalsIgnoreCase(request.getServletPath())) {
             log.debug("Logout user session");
             response.setHeader("Cache-Control", "no-cache");
@@ -52,6 +70,7 @@ public class LoginController extends HttpServlet {
             return;
         }
 
+        // Login - check user login and password hash
         if ("/login".equalsIgnoreCase(request.getServletPath())) {
             User tmpUser = new User();
             tmpUser.setLogin(request.getParameter("login_email"));
@@ -72,11 +91,14 @@ public class LoginController extends HttpServlet {
                 request.setAttribute("user", tmpUser);
                 session.setAttribute("errLogin", bundle.getString("errLogin"));
             } catch (DAOException e) {
-                e.printStackTrace();
+                log.error("Error in login process ", e);
             }
         }
 
+        // Registration - check user login and password hash
+        // Doing Hibernate Validation for new entity User
         if ("/registration".equalsIgnoreCase(request.getServletPath())) {
+            log.trace("Attempt registration new user");
             User user = new User();
             user.setLogin(request.getParameter("regLoginEmail"));
             user.setPassword(Security.generateHash(request.getParameter("regPassword"), Security.SOME_SALT));
@@ -96,19 +118,29 @@ public class LoginController extends HttpServlet {
                     log.error("Registration error ", e);
                 }
             }
-
+            log.trace("Unsuccessful attempt to register");
             session.setAttribute("errRegister", err);
             request.setAttribute("user", user);
         }
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
+    /**
+     * All <code>Get<code/> requests redirect to {@link LoginController#doPost(HttpServletRequest, HttpServletResponse)}
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
         doPost(request, response);
     }
 
+    /**
+     * Changing default user localization
+     *
+     * Save parameter 'lang' in session scope
+     * @param request
+     * @param session
+     */
     private void setLocale(HttpServletRequest request, HttpSession session) {
         if (request.getParameter("lang") != null)
             switch (request.getParameter("lang")) {

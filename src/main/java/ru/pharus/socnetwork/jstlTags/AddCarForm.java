@@ -34,7 +34,7 @@ public class AddCarForm extends TagSupport{
             html.append(String.format("<option value='%d'> %s </option>",model.getId(),model.getName()));
         }
         html.append("</select><br><p>");
-        html.append(String.format(" %s <input type='text' name='carnumber' placeholder='о777о178' pattern='.{4,10}' required style='width: 90px;'/>",bundle.getString("car.number")));
+        html.append(String.format(" %s <input type='text' name='carnumber' placeholder='o777o178' pattern='.{4,10}' required style='width: 90px;'/>",bundle.getString("car.number")));
         html.append(String.format(" %s<input type='text' name='caryear' placeholder='YYYY' required pattern='^[0-9]{4,4}' style='width: 60px;'/></li>",bundle.getString("car.number")));
         html.append("</p><li><input type='submit'/></li></div></ul></div></form>");
 
