@@ -11,16 +11,19 @@ import java.security.NoSuchAlgorithmException;
  */
 
 public class Security {
+    public static final String SOME_SALT = "123";
     static final Logger log = LoggerFactory.getLogger(Security.class);
 
     public static boolean checkHash(String password, String salt, String hash){
         log.info("Checking hash for equals password");
-        if (null == hash) return false;
+        if (null == hash || null == password) return false;
         return hash.equals(generateHash(password,salt));
     }
 
     public static String generateHash(String password, String salt){
         log.info("Generating hash for password");
+        if (null == password) return null;
+
         // TODO: 16.03.2017 java.security.SecureRandom add this function for random salt generate
         StringBuffer sb = new StringBuffer();
             try{

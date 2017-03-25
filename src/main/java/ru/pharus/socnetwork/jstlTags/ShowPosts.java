@@ -9,6 +9,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class ShowPosts extends TagSupport {
     private static final Logger log = LoggerFactory.getLogger(ShowPosts.class);
@@ -18,22 +20,26 @@ public class ShowPosts extends TagSupport {
     public void setList(List<Post> list) {
         this.list = list;
     }
-
     public void setMax(int max){
         this.max = max;
     }
 
     @Override
     public int doStartTag() throws JspException {
+        Locale locale = pageContext.findAttribute("lang") == null ? new Locale("ru") : new Locale((String)pageContext.findAttribute("lang"));
+        ResourceBundle bundle = ResourceBundle.getBundle("localization", locale);
+
         //Collections.list(pageContext.getRequest().getAttributeNames()).forEach(System.out::println);
         User logUser = (User) pageContext.getRequest().getAttribute("logUser");
         User infoUser = (User) pageContext.getRequest().getAttribute("infoUser");
         Post editPost = (Post) pageContext.getRequest().getAttribute("editPost");
+        int increment = pageContext.getRequest().getParameter("allposts") == null ?
+                0 : Integer.valueOf(pageContext.getRequest().getParameter("allposts"));
+        increment++;
 
         boolean adminMode = false;
         adminMode = logUser.getRole() == Role.ADMIN;
-
-        int localMax = max;
+        int localMax = max * increment;
         if (localMax == 0 || localMax > list.size()) localMax = list.size();
 
         StringBuilder html = new StringBuilder();
@@ -52,22 +58,22 @@ public class ShowPosts extends TagSupport {
             html.append(String.format("<a href='/user?id=%s'>", infoUser.getId()));
             html.append(String.format("<div class='mainfriends' style=\"background-image:url('img/ava/%s')\"></div>",infoUser.getAvatar()));
             Post post = list.get(i);
-            html.append(String.format("<a href='/user?id=%s&view=%d'>user post</a>",infoUser.getId(), post.getId()));
+            html.append(String.format("<a href='/user?id=%s&view=%d'>%s %s</a>",infoUser.getId(), post.getId(),bundle.getString("userpost"), infoUser.getFullName()));
             html.append("</b>");
             html.append("</td></tr><tr><td><p>");
             html.append(list.get(i).getText());
             html.append("</td></tr>");
             if (logUser.getId() == infoUser.getId() || adminMode) {
                 html.append("<tr><td>");
-                html.append(String.format(": <a href='/user?id=%s&delpost=%d'>Delete</a>", infoUser.getId(), post.getId() ));
-                html.append(String.format(": <a href='/user?id=%s&editpost=%d'>Edit</a> :", infoUser.getId(), post.getId() ));
+                html.append(String.format(": <a href='/user?id=%s&delpost=%d'>%s</a>", infoUser.getId(), post.getId(), bundle.getString("delete") ));
+                html.append(String.format(": <a href='/user?id=%s&editpost=%d'>%s</a> :", infoUser.getId(), post.getId(), bundle.getString("edit") ));
                 html.append("</td></tr>");
             }
             html.append("</table>");
         }
 
         if(list.size() > localMax){
-            html.append(String.format("<p><a href='/user?id=%s&allposts=1'>  ---== Show more =--- </a>", infoUser.getId()));
+            html.append(String.format("<p><a href='/user?id=%s&allposts=%d'>  ---== %s ==--- </a>", infoUser.getId(), increment, bundle.getString("showmore")));
         }
 
         try{

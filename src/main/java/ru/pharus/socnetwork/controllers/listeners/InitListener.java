@@ -31,8 +31,8 @@ public class InitListener implements ServletContextListener {
             // Set TomCat JNDI DataSource for Dao layer
             DaoFactory.getInstanse().setDataSourceInjection(dataSource);
             DaoFactory.getInstanse().init(sce.getServletContext().getRealPath("/WEB-INF/classes"));
-        }catch (DAOException e){
-            log.error("DaoFactory initialization failed",e);
+        } catch (DAOException e) {
+            log.error("DaoFactory initialization failed", e);
         }
-}
+    }
 }

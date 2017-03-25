@@ -21,7 +21,8 @@
         compile 'ch.qos.logback:logback-classic:+',
                 'com.h2database:h2:+',
                 'org.hibernate:hibernate-validator:+',
-                'org.glassfish.web:javax.servlet.jsp.jstl:+'
+                'org.glassfish.web:javax.servlet.jsp.jstl:+',
+                'org.glassfish:javax.el:3.0.1-b08'
 
         compileOnly 'org.projectlombok:lombok:+'
         testCompile 'org.projectlombok:lombok:+'

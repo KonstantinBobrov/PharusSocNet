@@ -2,7 +2,9 @@ package ru.pharus.socnetwork.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.pharus.socnetwork.core.Security;
 import ru.pharus.socnetwork.dao.exception.DAOException;
+import ru.pharus.socnetwork.entity.Car;
 import ru.pharus.socnetwork.entity.Post;
 import ru.pharus.socnetwork.entity.User;
 import ru.pharus.socnetwork.service.CarService;
@@ -15,8 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-@WebServlet({"/user", "/id*", "/friends"})
+@WebServlet({"/user", "/id*", "/friends", "/edit"})
 public class UserController extends javax.servlet.http.HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private UsersService userService;
@@ -31,20 +35,24 @@ public class UserController extends javax.servlet.http.HttpServlet {
         carService = new CarService();
     }
 
-
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         doGet(request, response);
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+        request.removeAttribute("errEditProfile");
+        request.removeAttribute("errEditPost");
+        request.removeAttribute("errEditCars");
+
+        request.setCharacterEncoding("utf-8");
         HttpSession session = request.getSession();
         String url = request.getServletPath();
         User loginUser;
         User infoUser;
-
         try {
             loginUser = userService.getUserById((int) session.getAttribute("user_id"));
             if (loginUser == null) {
+                log.trace(String.format("User with id %s not found. Redirect to error page", session.getAttribute("user_id")));
                 response.sendRedirect("/error404");
             }
             request.setAttribute("logUser", loginUser);
@@ -53,6 +61,7 @@ public class UserController extends javax.servlet.http.HttpServlet {
             if (request.getParameter("id") != null) {
                 infoUser = userService.getUserById(Integer.parseInt(request.getParameter("id")));
                 if (infoUser == null) {
+                    log.trace(String.format("User with id %s not found. Redirect to error page", session.getAttribute("user_id")));
                     response.sendRedirect("/error404");
                     return;
                 }
@@ -63,14 +72,17 @@ public class UserController extends javax.servlet.http.HttpServlet {
             response.sendRedirect("/error404");
             return;
         } catch (NumberFormatException e) {
-            log.warn("Some problem in friends controller ", e);
+            log.warn("Some problem in user controller ", e);
         }
 
+        if (url.contains("/edit"))
+            goToEditController(request, response);
         if (url.contains("/user"))
             goToUserController(request, response);
         if (url.contains("/friends"))
             goToFriendsController(request, response);
     }
+
 
     private void goToUserController(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         User logUser = (User) request.getAttribute("logUser");
@@ -82,23 +94,35 @@ public class UserController extends javax.servlet.http.HttpServlet {
         String editpost = request.getParameter("editpost");
         String subscribe = request.getParameter("subscribe");
         String unsubscribe = request.getParameter("unsubscribe");
+        String carmodel = request.getParameter("carmodel");
 
         try {
             // запрос на довбавление поста
-            if (null != addpost && !addpost.isEmpty()) {
+            if (null != addpost && !addpost.equals("")) {
                 Post post = new Post();
                 post.setText(addpost);
                 post.setUserId(logUser.getId());
                 String postid = request.getParameter("postid");
-                if (postid != null && !addpost.isEmpty()) {
-                    post.setId(Integer.parseInt(postid));
-                    userService.editPost(post);
-                }else {
-                    userService.addPost(post);
+
+                String err = userService.validatePost(post);
+                if (err.isEmpty()) {
+                    try {
+                        if (postid != null && !postid.equals("")) {
+                            post.setId(Integer.parseInt(postid));
+                            userService.editPost(post);
+                        } else {
+                            userService.addPost(post);
+                        }
+                    } catch (DAOException e) {
+                        log.error(String.format("Error update user post %s", logUser.getLogin()));
+                    }
                 }
+                request.getSession().setAttribute("errEditPost", err);
+
+
             }
             // запрос на удаление поста
-            if (null != delpost && !delpost.isEmpty()) {
+            if (null != delpost && !delpost.equals("")) {
                 // TODO: 24.03.2017 добавть проверку на невозможность удаления чужого поста
                 userService.deletePost(Integer.parseInt(delpost));
             }
@@ -108,8 +132,26 @@ public class UserController extends javax.servlet.http.HttpServlet {
                 if (null != post)
                     request.setAttribute("editPost", post);
             }
+
+            if (null != carmodel) {
+                Car car = new Car();
+                car.setUserId(logUser.getId());
+                car.setModelId(Integer.parseInt(request.getParameter("carmodel")));
+                car.setCarNumber(request.getParameter("carnumber"));
+                car.setYear(Integer.parseInt(request.getParameter("caryear")));
+                String err = carService.validate(car);
+                if (err.isEmpty()) {
+                    try {
+                        carService.addCar(car);
+                    } catch (DAOException e) {
+                        log.error(String.format("Error update user post %s", logUser.getLogin()));
+                    }
+                }
+                request.getSession().setAttribute("errEditCars", err);
+            }
+
             // запрос на удаление авто
-            if (null != cardel && !cardel.isEmpty()) {
+            if (null != cardel && !cardel.equals("")) {
                 // TODO: 24.03.2017 добавть проверку на невозможность удаления чужого авто
                 carService.deleteCar(Integer.parseInt(cardel));
             }
@@ -123,6 +165,7 @@ public class UserController extends javax.servlet.http.HttpServlet {
             }
 
             // Занесение атрибутов в ответ
+            request.setAttribute("carModels", carService.getModels());
             request.setAttribute("listPosts", userService.getUserPosts(infoUser));
             request.setAttribute("listFriends", userService.getUserFriends(infoUser));
             request.setAttribute("listCars", carService.getUserCars(infoUser));
@@ -133,8 +176,40 @@ public class UserController extends javax.servlet.http.HttpServlet {
         }
     }
 
-    private void goToFriendsController(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void goToEditController(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User logUser = (User) request.getAttribute("logUser");
+        User user = logUser;
+        String err;
+        if (request.getParameter("regLoginEmail") != null) {
+            user.setPassword(request.getParameter("regPassword"));
+            user.setFullName(request.getParameter("regFullName"));
+            String birthDate = request.getParameter("birthDate");
+            if (birthDate != null && !birthDate.isEmpty()) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
+                LocalDate date = LocalDate.parse(request.getParameter("birthDate"), formatter);
+                user.setBirthDate(date);
+            }
+            //Validation user in Hibernate Validator
+            err = userService.validate(user);
+            if (err.isEmpty()) {
+                try {
+                    user.setPassword(Security.generateHash(user.getPassword(), Security.SOME_SALT));
+                    userService.updateUser(user);
+                    response.sendRedirect("/user");
+                    return;
+                } catch (DAOException e) {
+                    log.error(String.format("Error update user %s", user.getLogin()));
+                }
+            }
+            request.getSession().setAttribute("errEditProfile", err);
+        }
+
+        request.setAttribute("user", user);
+        request.getRequestDispatcher("/WEB-INF/jsp/edit.jsp").forward(request, response);
+    }
+
+    private void goToFriendsController(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //User logUser = (User) request.getAttribute("logUser");
         User infoUser = (User) request.getAttribute("infoUser");
 
         try {

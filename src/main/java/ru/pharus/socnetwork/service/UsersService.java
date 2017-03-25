@@ -8,10 +8,13 @@ import ru.pharus.socnetwork.dao.exception.DAOException;
 import ru.pharus.socnetwork.entity.Post;
 import ru.pharus.socnetwork.entity.User;
 
+import javax.validation.*;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UsersService {
+    private static Validator validator;
     private DaoFactory factory = DaoFactory.getInstanse();
     private UserDao userDao = factory.getUserDao();
     private PostDao postDao = factory.getPostDao();
@@ -67,5 +70,45 @@ public class UsersService {
     }
     public void unsubscribe(User user1, User user2) throws DAOException {
         friendsDao.removeFriend(user1.getId(), user2.getId());
+    }
+
+    public static void main(String[] args) {
+
+    }
+
+    public void register(User user) throws DAOException {
+        userDao.create(user);
+    }
+
+    public void updateUser(User user) throws DAOException {
+        userDao.update(user);
+    }
+
+    public String validate(User user) {
+        StringBuilder err = new StringBuilder();
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<User>> results = validator.validate(user);
+
+        for (ConstraintViolation<User> violation: results)
+        {
+        err.append(violation.getMessage()).append("<br>");
+        }
+        
+        return err.toString();
+    }
+
+    public String validatePost(Post post) {
+        StringBuilder err = new StringBuilder();
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<Post>> results = validator.validate(post);
+
+        for (ConstraintViolation<Post> violation: results)
+        {
+            err.append(violation.getMessage()).append("<br>");
+        }
+
+        return err.toString();
     }
 }

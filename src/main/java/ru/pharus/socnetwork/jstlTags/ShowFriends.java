@@ -25,11 +25,9 @@ public class ShowFriends extends TagSupport {
     public void setCols(int cols){
         this.cols = cols;
     }
-
     public void setTitle(String title){
         this.title = title;
     }
-
     public void setMax(int max){
         this.max = max;
     }

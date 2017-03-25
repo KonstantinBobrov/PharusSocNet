@@ -12,6 +12,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 
 public class ShowCars extends TagSupport {
@@ -39,6 +41,9 @@ public class ShowCars extends TagSupport {
 
     @Override
     public int doStartTag() throws JspException {
+        Locale locale = pageContext.findAttribute("lang") == null ? new Locale("ru") : new Locale((String)pageContext.findAttribute("lang"));
+        ResourceBundle bundle = ResourceBundle.getBundle("localization", locale);
+
         if (max == 0 || max > list.size()) max = list.size();
 
         StringBuilder html = new StringBuilder();
@@ -47,23 +52,23 @@ public class ShowCars extends TagSupport {
             html.append("<p><table border=1 width=100% class = 'tablistcars'>");
             html.append("<tr><td colspan=2><p><b>");
             Car car = list.get(i);
-            html.append(String.format("Model name: %s", carService.getModelById(car.getModelId()).getName()));
+            html.append(String.format("%s: %s", bundle.getString("car.modelname"),carService.getModelById(car.getModelId()).getName()));
             html.append("</b>");
             html.append("</td></tr><tr><td>");
-            html.append(String.format("Number: %s ", car.getCarNumber()));
+            html.append(String.format("%s: %s ", bundle.getString("car.number"),car.getCarNumber()));
             html.append("</td><td>");
-            html.append(String.format("Year: %s ", car.getYear()));
+            html.append(String.format("%s: %s ", bundle.getString("car.year"), car.getYear()));
             html.append("</td></tr>");
             if (logUser.getId() == infoUser.getId() || adminMode) {
                 html.append("<tr><td colspan=2>");
-                html.append(String.format(": <a href='?cardel=%d'>Delete</a> : ", car.getId()));
+                html.append(String.format(": <a href='?cardel=%d'>%s</a> : ", car.getId(),bundle.getString("delete")));
                 html.append("</td></tr>");
             }
             html.append("</table>");
         }
 
         if(list.size() > max){
-            //html.append(String.format("<p><a href='/car?user=%d'>  ---== Show more =--- </a>", infoUser.getId()));
+            //html.append(String.format("<p><a href='/user?id=%s&allcars=%d'>  ---== %s ==--- </a>", infoUser.getId(), increment, bundle.getString("showmore")));
         }
 
 

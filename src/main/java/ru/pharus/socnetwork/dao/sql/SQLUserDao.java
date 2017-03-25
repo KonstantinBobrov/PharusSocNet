@@ -33,7 +33,7 @@ public class SQLUserDao implements UserDao {
             statement.setObject(3, user.getFullName());
             statement.setObject(4, user.getBirthDate());
             statement.setObject(5, user.getRegisterDate());
-            statement.setObject(6, user.getRole());
+            statement.setObject(6, user.getRole().name());
 
             log.trace("Open connection and statement. Execute query: insert user");
             statement.executeUpdate();
@@ -58,7 +58,7 @@ public class SQLUserDao implements UserDao {
         log.debug(String.format("Updating user %s", user.getLogin()));
 
         String sql =
-                "UPDATE users set login = ?, password = ?, full_name = ?, birth_date = ?, register_date = ?, role = ?) " +
+                "UPDATE users set login = ?, password = ?, full_name = ?, birth_date = ?, register_date = ?, role = ? " +
                         "WHERE id = " + user.getId();
 
         try (Connection conn = factory.getConnection();
@@ -68,7 +68,7 @@ public class SQLUserDao implements UserDao {
             statement.setObject(3, user.getFullName());
             statement.setObject(4, user.getBirthDate());
             statement.setObject(5, user.getRegisterDate());
-            statement.setObject(6, user.getRole());
+            statement.setObject(6, user.getRole().name());
             log.trace("Open connection and statement. Execute query: update user");
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -118,8 +118,10 @@ public class SQLUserDao implements UserDao {
                         resultSet.getString("login"),
                         resultSet.getString("password"),
                         resultSet.getString("full_name"),
-                        resultSet.getDate("birth_date").toLocalDate(),
-                        resultSet.getTimestamp("register_date").toLocalDateTime(),
+                        resultSet.getDate("birth_date") == null ? null
+                                : resultSet.getDate("birth_date").toLocalDate(),
+                        resultSet.getTimestamp("register_date")== null ? null
+                                : resultSet.getTimestamp("register_date").toLocalDateTime(),
                         Role.valueOf(resultSet.getString("role"))
                 );
 

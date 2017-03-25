@@ -13,7 +13,7 @@
 <fmt:setLocale value="${not empty sessionScope['lang'] ? sessionScope['lang'] : 'Ru'}"/>
 <fmt:setBundle basename="localization"/>
 
-<jsp:include page="template/header.jsp" flush="true"/>
+<jsp:include page="template/header.jsp"/>
 <jsp:include page="template/leftmenu.jsp"/>
 
 
@@ -55,12 +55,12 @@
         <div id="userinfo">
             <ul>
                 <li>${infoUser.fullName}</li>
-                <li>дата рождения: ${infoUser.birthDate}</li>
-                <li>дата регистрации:
+                <li><fmt:message key="profile.birthDate"/>: ${infoUser.birthDate}</li>
+                <li><fmt:message key="profile.regDate"/>:
                     <c:set var="cleanedDateTime" value="${fn:replace(infoUser.registerDate, 'T', ' ')}"/>
                     <fmt:parseDate value="${ cleanedDateTime }" pattern="yyyy-MM-dd" var="parsedDateTime" type="both"/>
                     <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedDateTime }"/></li>
-                <li>статус: ${'ADMIN' eq infoUser.role ? 'Администратор' : 'Пользователь'}</li>
+                <li><fmt:message key="profile.status"/>: ${'ADMIN' eq infoUser.role ? 'Администратор' : 'Пользователь'}</li>
             </ul>
 
 
@@ -68,14 +68,19 @@
 
         <div id="rightpanelbigspace"><!-- blank --></div>
         <div id="usercarsinfo">
-            Гараж - всего машин (${listCars.size()})
-            <ptags:showcars list="${listCars}" max="2"/>
+
+            <fmt:message key="user.garage"/> - <fmt:message key="user.totalcars"/> (${listCars.size()})
+            <ptags:showcars list="${listCars}" max="3"/>
+            <br>
+            <div class="diverror">${sessionScope['errEditCars']}</div>
+            <ptags:AddCarForm/>
         </div>
 
         <div id="rightpanelbigspace"><!-- blank --></div>
 
         <div id="postinfo">
-            Бортжурнал - всего записей (${listPosts.size()})
+            <div class="diverror">${sessionScope['errEditPost']}</div>
+            <fmt:message key="user.logbook"/> - <fmt:message key="user.totalrecords"/>  (${listPosts.size()})
             <ptags:showposts list="${listPosts}" max="3"/>
         </div>
     </div>

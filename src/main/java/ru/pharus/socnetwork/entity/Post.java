@@ -3,6 +3,7 @@ package ru.pharus.socnetwork.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
@@ -22,6 +23,6 @@ public class Post {
     private String title;
 //    post TEXT,
     @NotBlank(message = "Please enter text")
-    @Size(max = 1800)
+    @Length(min=5, max=30)
     private String text;
 }

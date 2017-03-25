@@ -1,9 +1,9 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <fmt:setLocale value="${not empty sessionScope['lang'] ? sessionScope['lang'] : 'Ru'}" />
 <fmt:setBundle basename="localization"/>
+<jsp:useBean id="user" class="ru.pharus.socnetwork.entity.User" scope="request"/>
 
 <html>
 <head>
@@ -29,7 +29,8 @@
   <form class="login_form" action="${pageContext.request.contextPath}/login" method="post" name="login_form">
     <ul>
       <li>
-        <input type="email" name="login_email" placeholder="<fmt:message key="emailplaceholder"/>" autocomplete="on" required/>
+        <div class="diverror">${sessionScope['errLogin']}</div>
+        <input type="email" name="login_email" value="${user.login}" placeholder="<fmt:message key="emailplaceholder"/>" autocomplete="on" required/>
       </li>
       <li>
         <input type="password" name="password" placeholder="<fmt:message key="passwordplaceholder"/>" required/>
@@ -50,13 +51,14 @@
         <!--<span class="required_notification"> * Required Field </span>-->
       </li>
       <li>
-        <input type="email" name="login_email" placeholder="<fmt:message key="remailplaceholder"/>" autocomplete="on" required/>
+        <div class="diverror">${sessionScope['errRegister']}</div>
+        <input type="email" name="regLoginEmail" value="${user.login}" placeholder="<fmt:message key="remailplaceholder"/>" autocomplete="on" required/>
       </li>
       <li>
-        <input type="password" name="password" placeholder="<fmt:message key="rpasswordplaceholder"/>" required/>
+        <input type="password" name="regPassword" placeholder="<fmt:message key="rpasswordplaceholder"/>" required/>
       </li>
       <li>
-        <input type="text" name="full_name" placeholder="<fmt:message key="rnameplaceholder"/>" required/>
+        <input type="text" name="regFullName" value="${user.fullName}" placeholder="<fmt:message key="rnameplaceholder"/>" required/>
       </li>
       <!-- <li>
           <input type="Date" name="full_name"/>

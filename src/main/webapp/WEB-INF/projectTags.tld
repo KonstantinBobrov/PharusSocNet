@@ -104,6 +104,12 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+
+    <tag>
+        <name>AddCarForm</name>
+        <tag-class>ru.pharus.socnetwork.jstlTags.AddCarForm</tag-class>
+        <body-content>empty</body-content>
+    </tag>
     <!-- Invoke 'Generate' action to add tags or functions -->
 
 </taglib>

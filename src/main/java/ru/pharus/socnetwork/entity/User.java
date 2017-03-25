@@ -2,9 +2,12 @@ package ru.pharus.socnetwork.entity;
 
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.Range;
 import ru.pharus.socnetwork.entity.enums.Role;
 
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,14 +21,16 @@ import java.time.LocalDateTime;
 public class User {
     private int id;
     @Email
-    @NotBlank(message = "Enter login")
+    @NotBlank(message = "Please enter login")
     @Size(max = 64)
     private String login;
-    @Size(max = 128)
+    @Length(min=3, max=128)
     private String password;
-    @Size(max = 64)
+    @Length(min=5, max=30)
     private String fullName;
+    @Past
     private LocalDate birthDate;
+    @Past
     private LocalDateTime registerDate;
     private Role role;
     private String avatar;
