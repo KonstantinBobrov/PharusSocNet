@@ -86,7 +86,7 @@ public class DaoFactory {
         }
     }
 
-    public static DaoFactory getInstanse(){
+    public static DaoFactory getInstance(){
         DaoFactory instance = daoINSTANCE;
         if (instance == null){
             synchronized (DaoFactory.class){

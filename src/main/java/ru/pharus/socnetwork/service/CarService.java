@@ -7,19 +7,17 @@ import ru.pharus.socnetwork.dao.UserDao;
 import ru.pharus.socnetwork.dao.exception.DAOException;
 import ru.pharus.socnetwork.entity.Car;
 import ru.pharus.socnetwork.entity.Model;
-import ru.pharus.socnetwork.entity.Post;
 import ru.pharus.socnetwork.entity.User;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
 public class CarService {
-    private DaoFactory factory = DaoFactory.getInstanse();
+    private DaoFactory factory = DaoFactory.getInstance();
     private UserDao userDao = factory.getUserDao();
     private CarsDao carsDao = factory.getCarsDao();
     private ModelDao modelDao = factory.getModelDao();

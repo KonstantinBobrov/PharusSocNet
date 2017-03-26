@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class UsersService {
     private static Validator validator;
-    private DaoFactory factory = DaoFactory.getInstanse();
+    private DaoFactory factory = DaoFactory.getInstance();
     private UserDao userDao = factory.getUserDao();
     private PostDao postDao = factory.getPostDao();
     private FriendsDao friendsDao = factory.getFriendsDao();
@@ -72,9 +72,6 @@ public class UsersService {
         friendsDao.removeFriend(user1.getId(), user2.getId());
     }
 
-    public static void main(String[] args) {
-
-    }
 
     public void register(User user) throws DAOException {
         userDao.create(user);

@@ -30,7 +30,6 @@ public class AddCarForm extends TagSupport{
         html.append("<div class='content'><form action='/user' method='get'/><li>");
         html.append("<select name='carmodel' required><option disabled selected>...</option>");
         for(Model model:models){
-            System.out.println(model.getName());
             html.append(String.format("<option value='%d'> %s </option>",model.getId(),model.getName()));
         }
         html.append("</select><br><p>");

@@ -13,7 +13,7 @@ import java.util.*;
 
 public class SQLFriendsDao implements FriendsDao {
     private static final Logger log = LoggerFactory.getLogger(SQLFriendsDao.class);
-    private DaoFactory factory = DaoFactory.getInstanse();
+    private DaoFactory factory = DaoFactory.getInstance();
 
     @Override
     public void addFriend(int user, int friend) throws DAOException {

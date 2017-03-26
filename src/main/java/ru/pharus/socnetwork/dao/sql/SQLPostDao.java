@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SQLPostDao implements PostDao{
     private static final Logger log = LoggerFactory.getLogger(SQLPostDao.class);
-    private DaoFactory factory = DaoFactory.getInstanse();
+    private DaoFactory factory = DaoFactory.getInstance();
 
     @Override
     public int create(Post message) throws DAOException {

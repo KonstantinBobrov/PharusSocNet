@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SQLMessageDao implements MessageDao {
     private static final Logger log = LoggerFactory.getLogger(SQLMessageDao.class);
-    private DaoFactory factory = DaoFactory.getInstanse();
+    private DaoFactory factory = DaoFactory.getInstance();
 
     @Override
     public int create(Message message) throws DAOException {

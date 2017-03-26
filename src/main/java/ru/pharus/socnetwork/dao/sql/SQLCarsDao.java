@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SQLCarsDao implements CarsDao {
     private static final Logger log = LoggerFactory.getLogger(SQLCarsDao.class);
-    private DaoFactory factory = DaoFactory.getInstanse();
+    private DaoFactory factory = DaoFactory.getInstance();
 
     @Override
     public int create(Car model) throws DAOException {

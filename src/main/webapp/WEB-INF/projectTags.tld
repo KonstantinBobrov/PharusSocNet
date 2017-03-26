@@ -110,6 +110,17 @@
         <tag-class>ru.pharus.socnetwork.jstlTags.AddCarForm</tag-class>
         <body-content>empty</body-content>
     </tag>
+
+    <tag>
+        <name>FormatLocalDate</name>
+        <tag-class>ru.pharus.socnetwork.jstlTags.FormatLocalDate</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>date</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
     <!-- Invoke 'Generate' action to add tags or functions -->
 
 </taglib>

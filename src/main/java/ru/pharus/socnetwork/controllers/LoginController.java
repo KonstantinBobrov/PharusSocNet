@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 /**
@@ -101,8 +102,9 @@ public class LoginController extends HttpServlet {
             log.trace("Attempt registration new user");
             User user = new User();
             user.setLogin(request.getParameter("regLoginEmail"));
-            user.setPassword(Security.generateHash(request.getParameter("regPassword"), Security.SOME_SALT));
+            user.setPassword(Security.generateHash(request.getParameter("regPassword"), Security.SOME_SALT)); //uses default salt
             user.setFullName(request.getParameter("regFullName"));
+            user.setRegisterDate(LocalDateTime.now());
             user.setRole(Role.USER);
 
             String err = service.validate(user);
@@ -138,8 +140,8 @@ public class LoginController extends HttpServlet {
      * Changing default user localization
      *
      * Save parameter 'lang' in session scope
-     * @param request
-     * @param session
+     * @param request - current servlet request
+     * @param session - current user session
      */
     private void setLocale(HttpServletRequest request, HttpSession session) {
         if (request.getParameter("lang") != null)

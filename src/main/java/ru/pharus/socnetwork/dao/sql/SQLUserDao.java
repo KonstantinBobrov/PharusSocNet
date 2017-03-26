@@ -7,13 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import ru.pharus.socnetwork.dao.DaoFactory;
 import ru.pharus.socnetwork.dao.UserDao;
+import ru.pharus.socnetwork.dao.cache.DaoCache;
 import ru.pharus.socnetwork.dao.exception.DAOException;
 import ru.pharus.socnetwork.entity.User;
 import ru.pharus.socnetwork.entity.enums.Role;
 
 public class SQLUserDao implements UserDao {
     private static final Logger log = LoggerFactory.getLogger(SQLUserDao.class);
-    private DaoFactory factory = DaoFactory.getInstanse();
+    private DaoFactory factory = DaoFactory.getInstance();
+    private DaoCache cache = DaoCache.getInstance();
 
     @Override
     public int create(User user) throws DAOException {
@@ -55,6 +57,8 @@ public class SQLUserDao implements UserDao {
             return;
         }
 
+        cache.removeUser(user.getId());
+
         log.debug(String.format("Updating user %s", user.getLogin()));
 
         String sql =
@@ -81,6 +85,8 @@ public class SQLUserDao implements UserDao {
     public void delete(int id) throws DAOException {
         if (id < 1) return;
 
+        cache.removeUser(id);
+
         log.debug(String.format("deleting user with id %d", id));
 
         String sql = "Delete from users where id=" + id;
@@ -96,8 +102,15 @@ public class SQLUserDao implements UserDao {
 
     @Override
     public User getById(int id) throws DAOException {
-        log.debug(String.format("Get user by user.id %d", id));
-        return getByCriteria(" where id = " + id).stream().findFirst().orElse(null);
+        User user = cache.getUser(id);
+        if (user == null) {
+            log.debug(String.format("Get user by user.id %d", id));
+            user = getByCriteria(" where id = " + id).stream().findFirst().orElse(null);
+            if (user != null) {
+                cache.putUser(user);
+            }
+        }
+        return user;
     }
 
     public List<User> getByCriteria(String where) throws DAOException {

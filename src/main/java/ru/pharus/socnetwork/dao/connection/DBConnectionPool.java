@@ -38,7 +38,7 @@ public class DBConnectionPool {
     }
 
     private Connection newConnection() throws DAOException{
-        return DaoFactory.getInstanse().getConnection();
+        return DaoFactory.getInstance().getConnection();
     }
 
     public synchronized void freeConnections(Connection con) {

@@ -55,11 +55,14 @@
         <div id="userinfo">
             <ul>
                 <li>${infoUser.fullName}</li>
-                <li><fmt:message key="profile.birthDate"/>: ${infoUser.birthDate}</li>
+                <li><fmt:message key="profile.birthDate"/>: <ptags:FormatLocalDate date="${infoUser.birthDate}"/> </li>
                 <li><fmt:message key="profile.regDate"/>:
-                    <c:set var="cleanedDateTime" value="${fn:replace(infoUser.registerDate, 'T', ' ')}"/>
+
+
+                    <ptags:FormatLocalDate date="${infoUser.registerDate.toLocalDate()}"/>
+                    <%--<c:set var="cleanedDateTime" value="${fn:replace(infoUser.registerDate, 'T', ' ')}"/>
                     <fmt:parseDate value="${ cleanedDateTime }" pattern="yyyy-MM-dd" var="parsedDateTime" type="both"/>
-                    <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedDateTime }"/></li>
+                    <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedDateTime }"/></li>--%>
                 <li><fmt:message key="profile.status"/>: ${'ADMIN' eq infoUser.role ? 'Администратор' : 'Пользователь'}</li>
             </ul>
 

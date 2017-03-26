@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.pharus.socnetwork.dao.DaoFactory;
 import ru.pharus.socnetwork.dao.ModelDao;
+import ru.pharus.socnetwork.dao.cache.DaoCache;
 import ru.pharus.socnetwork.dao.exception.DAOException;
 import ru.pharus.socnetwork.entity.Model;
 import java.sql.*;
@@ -12,7 +13,8 @@ import java.util.List;
 
 public class SQLModelDao implements ModelDao {
     private static final Logger log = LoggerFactory.getLogger(SQLModelDao.class);
-    private DaoFactory factory = DaoFactory.getInstanse();
+    private DaoFactory factory = DaoFactory.getInstance();
+    private DaoCache cache = DaoCache.getInstance();
 
     @Override
     public int create(Model model) throws DAOException {
@@ -31,8 +33,13 @@ public class SQLModelDao implements ModelDao {
 
             log.trace("Open connection and statement. Execute query: insert model");
             statement.executeUpdate();
-            model.setId(statement.getGeneratedKeys().getInt(1));
-
+            try(ResultSet rs = statement.getGeneratedKeys()){
+                if(rs.next()){
+                    model.setId(rs.getInt(1));
+                    cache.putModel(model);
+                }
+                //add saved entity to cash
+            }
             return model.getId();
 
         } catch (SQLException e) {

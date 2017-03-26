@@ -2,8 +2,6 @@ package ru.pharus.socnetwork.controllers.filters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.pharus.socnetwork.controllers.LoginController;
-import ru.pharus.socnetwork.service.UsersService;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;

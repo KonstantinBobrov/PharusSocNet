@@ -16,7 +16,7 @@ import java.util.List;
 
 public class SQLVendorDao implements VendorDao {
     private static final Logger log = LoggerFactory.getLogger(SQLVendorDao.class);
-    private DaoFactory factory = DaoFactory.getInstanse();
+    private DaoFactory factory = DaoFactory.getInstance();
 
     @Override
     public int create(Vendor vendor) throws DAOException {

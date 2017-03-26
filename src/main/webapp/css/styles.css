@@ -225,6 +225,15 @@ ol{
     color: #285473;
 }
 
+.login_form {
+	padding-top:12px;
+	border:1px solid #a2bad5;
+}
+
+.register_form {
+	border:1px solid #a2bad5;
+}
+
 /* стиль для списков с чертой */
 ul {
     list-style: none outside;

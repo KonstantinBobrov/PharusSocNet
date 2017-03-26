@@ -43,13 +43,14 @@ public class Security {
         if (null == password) return null;
 
         // TODO: 16.03.2017 java.security.SecureRandom add this function for random salt generate
+        @SuppressWarnings("StringBufferMayBeStringBuilder")
         StringBuffer sb = new StringBuffer();
             try{
                 MessageDigest mDigest = MessageDigest.getInstance(SHA_1);
                 byte[] result = mDigest.digest((password + salt).getBytes());
 
-                for (int i = 0; i < result.length; i++) {
-                    sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+                for (byte aResult : result) {
+                    sb.append(Integer.toString((aResult & 0xff) + 0x100, 16).substring(1));
                 }
             }catch (NoSuchAlgorithmException e){
                 log.error("Security SHA1 algorithm not found", e);
