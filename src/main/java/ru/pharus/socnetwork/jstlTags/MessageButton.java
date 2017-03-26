@@ -23,7 +23,7 @@ public class MessageButton extends TagSupport {
         User infoUser = (User) pageContext.getRequest().getAttribute("infoUser");
 
         StringBuilder html = new StringBuilder();
-        html.append(String.format("<a href='/user?message=%d'>",infoUser.getId()));
+        html.append(String.format("<a href='/messages?id=%d'>",infoUser.getId()));
         html.append(String.format("<div class='flatbutton'>%s</div></a>",caption));
 
         try {

@@ -22,7 +22,7 @@
         <div id="avatarcontainter">
             <div id="bavatar" style="background-image:url('img/ava/${infoUser.avatar}')"></div>
         </div>
-        <div id="rightpanelsmallspace"><!-- blank --></div>
+        <div class="rightpanelsmallspace"><!-- blank --></div>
         <div id="addfriend">
             <c:choose>
                 <c:when test="${logUser.id == infoUser.id}">
@@ -40,7 +40,7 @@
             </c:choose>
         </div>
 
-        <div id="rightpanelsmallspace"><!-- blank --></div>
+        <div class="rightpanelsmallspace"><!-- blank --></div>
 
         <div id="listfriends">
             <fmt:message key="subscription" var="friendslist"/>
@@ -69,7 +69,7 @@
 
         </div>
 
-        <div id="rightpanelbigspace"><!-- blank --></div>
+        <div class="rightpanelbigspace"><!-- blank --></div>
         <div id="usercarsinfo">
 
             <fmt:message key="user.garage"/> - <fmt:message key="user.totalcars"/> (${listCars.size()})
@@ -79,7 +79,7 @@
             <ptags:AddCarForm/>
         </div>
 
-        <div id="rightpanelbigspace"><!-- blank --></div>
+        <div class="rightpanelbigspace"><!-- blank --></div>
 
         <div id="postinfo">
             <div class="diverror">${sessionScope['errEditPost']}</div>

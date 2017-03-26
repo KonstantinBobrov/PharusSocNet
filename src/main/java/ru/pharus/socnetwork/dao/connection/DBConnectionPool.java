@@ -1,6 +1,7 @@
 package ru.pharus.socnetwork.dao.connection;
 
 import ru.pharus.socnetwork.dao.DaoFactory;
+import ru.pharus.socnetwork.dao.cache.DaoCache;
 import ru.pharus.socnetwork.dao.exception.DAOException;
 
 import java.sql.Connection;
@@ -18,21 +19,29 @@ public class DBConnectionPool {
         maxConn = poolSize;
     }
 
-    public static synchronized DBConnectionPool getInstance(int poolSize) {
+    public static DBConnectionPool getInstance(int poolSize) {
+        DBConnectionPool daoINSTANCE = instance;
         if (instance == null) {
-            instance = new DBConnectionPool(poolSize);
+            synchronized (DBConnectionPool.class) {
+                daoINSTANCE = instance;
+                if (daoINSTANCE == null) {
+                    instance = daoINSTANCE = new DBConnectionPool(poolSize);
+                }
+            }
         }
-        return instance;
+        return daoINSTANCE;
     }
 
-    public synchronized Connection getConnection() throws DAOException {
+    public Connection getConnection() throws DAOException {
         Connection con = null;
-        if (!freeConnections.isEmpty()) {
-            con = freeConnections.get(freeConnections.size() - 1);
-            freeConnections.remove(con);
-            con = getConnection();
-        } else {
-            con = newConnection();
+        synchronized (this) {
+            if (!freeConnections.isEmpty()) {
+                con = freeConnections.get(freeConnections.size() - 1);
+                freeConnections.remove(con);
+                con = getConnection();
+            } else {
+                con = newConnection();
+            }
         }
         return con;
     }
@@ -41,23 +50,27 @@ public class DBConnectionPool {
         return DaoFactory.getInstance().getConnection();
     }
 
-    public synchronized void freeConnections(Connection con) {
-        if ((con != null) && (freeConnections.size() <= maxConn)) {
-            freeConnections.add(con);
+    public void freeConnections(Connection con) {
+        synchronized (this) {
+            if ((con != null) && (freeConnections.size() <= maxConn)) {
+                freeConnections.add(con);
+            }
         }
     }
 
-    public synchronized void released() {
-        Iterator allConnections = freeConnections.iterator();
-        while (allConnections.hasNext()) {
-            Connection con = (Connection) allConnections.next();
-            try {
-                con.close();
-                System.out.println("Closed connection for pool");
-            } catch (SQLException e) {
-                System.out.println("Can't close connection for pool");
+    public void released() {
+        synchronized (this) {
+            Iterator allConnections = freeConnections.iterator();
+            while (allConnections.hasNext()) {
+                Connection con = (Connection) allConnections.next();
+                try {
+                    con.close();
+                    System.out.println("Closed connection for pool");
+                } catch (SQLException e) {
+                    System.out.println("Can't close connection for pool");
+                }
             }
+            freeConnections.clear();
         }
-        freeConnections.clear();
     }
 }

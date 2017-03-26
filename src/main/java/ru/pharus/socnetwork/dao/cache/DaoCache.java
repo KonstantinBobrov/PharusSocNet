@@ -7,16 +7,20 @@ import ru.pharus.socnetwork.dao.DaoFactory;
 import ru.pharus.socnetwork.entity.Model;
 import ru.pharus.socnetwork.entity.User;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+
+/**
+ * This is local database cache
+ *
+ * User cache - keeps N (USER_CACHE_SIZE) records and deletes old entry's by himself
+ * Model cache - keeps all entry's models
+ */
 
 public class DaoCache {
     private static final Logger log = LoggerFactory.getLogger(DaoCache.class);
-    private DaoFactory factory = DaoFactory.getInstance();
     private static volatile DaoCache daoINSTANCE;
-    private final int USER_CACHE_SIZE = 10;
+    private final int USER_CACHE_SIZE = DaoFactory.getInstance().getMaxCacheSize();
     private LinkedHashMap<Integer, User> userCache = new LinkedHashMap<Integer, User>() {
         @Override
         protected boolean removeEldestEntry(Map.Entry<Integer, User> eldest) {
@@ -31,7 +35,6 @@ public class DaoCache {
             return false;
         }
     };
-
     private Map<Integer, Model> modelCache =  new ConcurrentHashMap<>();
 
 
@@ -71,5 +74,25 @@ public class DaoCache {
 
     public Model getModel(int id){
         return modelCache.get(id);
+    }
+
+    public void removeModel(int id) {
+        modelCache.remove("id");
+    }
+
+    public boolean isModelsEmpty(){
+        return modelCache.isEmpty();
+    }
+
+    public void putModels(List<Model> list) {
+        for (Model model: list) {
+            modelCache.put(model.getId(),model);
+        }
+    }
+
+    public List<Model> getAllModels() {
+        List<Model> models = new ArrayList<>();
+        models.addAll(modelCache.values());
+        return models;
     }
 }

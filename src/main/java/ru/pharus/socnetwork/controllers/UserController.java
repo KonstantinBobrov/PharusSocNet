@@ -84,6 +84,8 @@ public class UserController extends javax.servlet.http.HttpServlet {
             goToUserController(request, response);
         if (url.contains("/friends"))
             goToFriendsController(request, response);
+        if (url.contains("/feed"))
+            goToFeedController(request, response);
     }
 
 
@@ -210,10 +212,26 @@ public class UserController extends javax.servlet.http.HttpServlet {
     private void goToFriendsController(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User infoUser = (User) request.getAttribute("infoUser");
         try {
-            request.setAttribute("listFriends", userService.getUserFriends(infoUser));
+            if(request.getParameter("search")==null){
+                request.setAttribute("listFriends", userService.getUserFriends(infoUser));
+            }else{
+                request.setAttribute("listFriends", userService.getAll());
+            }
+
             request.getRequestDispatcher("/WEB-INF/jsp/friends.jsp").forward(request, response);
         } catch (DAOException e) {
             log.error("Error in friends controller database service ", e);
+            response.sendRedirect("/error404");
+        }
+    }
+
+    private void goToFeedController(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        User logUser = (User) request.getAttribute("logUser");
+        try {
+            request.setAttribute("listPosts", userService.getUserNews(logUser));
+            request.getRequestDispatcher("/WEB-INF/jsp/feed.jsp").forward(request, response);
+        }catch(DAOException e){
+            log.error("Error in news feed controller service ", e);
             response.sendRedirect("/error404");
         }
     }

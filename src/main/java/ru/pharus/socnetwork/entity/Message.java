@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.time.LocalDateTime;
 
 @Data
@@ -24,5 +25,6 @@ public class Message {
     @NotBlank (message = "Enter message")
     private String message;
     //post_time DATETIME,
+    @Past
     private LocalDateTime postTime;
 }

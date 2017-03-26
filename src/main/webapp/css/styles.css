@@ -79,8 +79,16 @@ div#smallogo, div#smallava {
 	vertical-align: middle;
 }
 
+.lastchat {
+	text-align: left;
+	padding:20px;
+	color: #3f5d81;
+	background-color:#e1e5eb;
+	border:1px solid blue;
+}
+
 .tablistfr {
-	padding:10;
+	padding:10px;
 }
 .tablistfr td {
 	width:33%;
@@ -159,6 +167,11 @@ div#addfriend{
 	border-radius: 7px;
 	background-color: white;
 }
+.tablistpost, .tablistcars {
+	padding-top:10px;
+	border:1px solid #a2bad5;
+}
+
 
 .flatbutton {
 	padding: 3px;
@@ -168,13 +181,13 @@ div#addfriend{
 	width:200px;
 }
 
-div#listfriends{
+div#listfriends {
 	border-radius: 7px;
 	background-color: white;
 	min-height: 220px;
 }
 
-div#rightpanelbigspace, div#rightpanelsmallspace{
+.rightpanelbigspace, .rightpanelsmallspace {
 	height: 15px;
 }
 

@@ -94,7 +94,7 @@ public class SQLPostDao implements PostDao{
         log.debug(String.format("Get user posts by criteria %s", where));
         List<Post> list = new ArrayList<>();
 
-        String sql = String.format("SELECT id, user_id, title, post FROM posts %s ORDER BY id DESC", where);
+        String sql = String.format("SELECT posts.id, user_id, title, post FROM posts %s ORDER BY id DESC", where);
 
         try (Connection conn = factory.getConnection();
              PreparedStatement statement = conn.prepareStatement(sql);

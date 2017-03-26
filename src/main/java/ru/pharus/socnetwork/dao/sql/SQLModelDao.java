@@ -64,6 +64,7 @@ public class SQLModelDao implements ModelDao {
             statement.setObject(1, model.getName());
             log.trace("Open connection and statement. Execute query: update car model");
             statement.executeUpdate();
+            cache.putModel(model);
         } catch (SQLException e) {
             log.warn("SQL error: cannot to update car model", e);
             throw new DAOException("SQL error: cannot to update car model", e);
@@ -81,6 +82,7 @@ public class SQLModelDao implements ModelDao {
         try(Connection conn = factory.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.executeUpdate();
+            cache.removeModel(id);
         } catch (SQLException e) {
             log.warn(String.format("SQL error: cannot to delete car model %s", id), e);
             throw new DAOException("SQL error: cannot to delete car model", e);
@@ -89,8 +91,11 @@ public class SQLModelDao implements ModelDao {
 
     @Override
     public List<Model> getAll() throws DAOException {
-        log.debug("Get all car models");
-        return getByCriteria(" ");
+        if (cache.isModelsEmpty()){
+            log.debug("Get all car models");
+            cache.putModels(getByCriteria(" "));
+        }
+        return cache.getAllModels();
     }
 
     @Override
@@ -120,7 +125,5 @@ public class SQLModelDao implements ModelDao {
             log.warn("SQL error: cannot select car models", e);
             throw new DAOException("SQL error: cannot select car models", e);
         }
-
-
     }
 }

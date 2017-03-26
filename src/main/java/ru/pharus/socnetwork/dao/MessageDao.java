@@ -19,4 +19,8 @@ public interface MessageDao {
     }
 
     List<Message> getMessagesByCriteria(String where) throws DAOException;
+
+    default List<Message> getMessagesByUser(int id) throws DAOException{
+        return getMessagesByCriteria(String.format(" where from_user_id=%d or to_user_id=%d", id, id));
+    }
 }

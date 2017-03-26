@@ -39,6 +39,7 @@ public class DaoFactory {
     private String dburl;
     private String dbdriver;
     private String dbpoolsize;
+    private int maxCacheSize;
 
     // TomCat JNDI DataSource does not work here
     // @Resource(name = "jdbc/TestDB")
@@ -65,6 +66,7 @@ public class DaoFactory {
             dbConnectionType = properties.getProperty("db.connection").toUpperCase();
             dbType = properties.getProperty("db.type").toUpperCase();
             initSQLFiles = Boolean.parseBoolean(properties.getProperty("db.initsqlfiles"));
+            maxCacheSize = Integer.parseInt(properties.getProperty("db.usercachesize"));
 
             switch (dbType){
                 case  "H2DB":
@@ -98,6 +100,10 @@ public class DaoFactory {
             }
         }
         return instance;
+    }
+
+    public int getMaxCacheSize(){
+        return maxCacheSize;
     }
 
     public void setDataSourceInjection (DataSource dataSource){

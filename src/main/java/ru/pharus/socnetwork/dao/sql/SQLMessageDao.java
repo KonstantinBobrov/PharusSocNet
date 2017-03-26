@@ -34,7 +34,9 @@ public class SQLMessageDao implements MessageDao {
 
             log.trace("Open connection and statement. Execute query: create message");
             statement.executeUpdate();
-            message.setId(statement.getGeneratedKeys().getInt(1));
+            try(ResultSet rs = statement.getGeneratedKeys()){
+                if(rs.next()) message.setId(rs.getInt(1));
+            }
 
             return message.getId();
 
@@ -48,7 +50,7 @@ public class SQLMessageDao implements MessageDao {
     public List<Message> getMessagesByCriteria(String where) throws DAOException {
         log.debug(String.format("Get messages by criteria %s", where));
 
-        String sql = "SELECT id, from_user_id, to_user_id, message, post_time  FROM messages " + where;
+        String sql = "SELECT messages.id, from_user_id, to_user_id, message, post_time  FROM messages " + where;
 
         try(Connection conn = factory.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);

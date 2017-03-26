@@ -13,8 +13,8 @@
 
 <div id="header">
     <div id="gohome"><a href="/"><div id="smallogo" style="background-image:url('img/logo.png');"></div></a></div>
-    <div id="searchinhead"><input type="text" autocomplete="off" placeholder="Поиск"><div id="smallava"></div></div>
-    <div id="logout" ><a href="/logout">Петр &nbsp <div id="smallava" style="background-image:url('img/ava/${logUser.avatar}');"></div> <fmt:message key="logout"/> </a></div>
+    <div id="searchinhead"><form action="/friends" method="get"><input type="text" name="search" autocomplete="off" placeholder="Поиск"></form><div id="smallava"></div></div>
+    <div id="logout" ><a href="/logout">&nbsp&nbsp&nbsp&nbsp&nbsp <div id="smallava" style="background-image:url('img/ava/${logUser.avatar}');"></div> <fmt:message key="logout"/> </a></div>
 </div>
 
 <div id="none"></div>

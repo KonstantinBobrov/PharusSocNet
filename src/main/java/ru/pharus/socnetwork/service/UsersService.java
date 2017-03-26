@@ -1,14 +1,13 @@
 package ru.pharus.socnetwork.service;
 
-import ru.pharus.socnetwork.dao.DaoFactory;
-import ru.pharus.socnetwork.dao.FriendsDao;
-import ru.pharus.socnetwork.dao.PostDao;
-import ru.pharus.socnetwork.dao.UserDao;
+import ru.pharus.socnetwork.dao.*;
 import ru.pharus.socnetwork.dao.exception.DAOException;
+import ru.pharus.socnetwork.entity.Message;
 import ru.pharus.socnetwork.entity.Post;
 import ru.pharus.socnetwork.entity.User;
 
 import javax.validation.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,6 +18,7 @@ public class UsersService {
     private UserDao userDao = factory.getUserDao();
     private PostDao postDao = factory.getPostDao();
     private FriendsDao friendsDao = factory.getFriendsDao();
+    private MessageDao messageDao = factory.getMessageDao();
 
     public User getUserByLogin(String login) throws DAOException{
         return userDao.getByCriteria(String.format(" where login='%s'", login)).stream().findFirst().orElse(null);
@@ -95,6 +95,18 @@ public class UsersService {
         return err.toString();
     }
 
+    public String validate(Message message) {
+        StringBuilder err = new StringBuilder();
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<Message>> results = validator.validate(message);
+        for (ConstraintViolation<Message> violation: results)
+        {
+            err.append(violation.getMessage()).append("<br>");
+        }
+        return err.toString();
+    }
+
     public String validatePost(Post post) {
         StringBuilder err = new StringBuilder();
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -107,5 +119,31 @@ public class UsersService {
         }
 
         return err.toString();
+    }
+
+    public List<Post> getUserNews(User logUser) throws DAOException {
+        List<Post> list;
+        list = postDao.getByCriteria(String.format(" INNER JOIN friends fr ON fr.id_friend = user_id WHERE fr.id_user=%d", logUser.getId()));
+        return list;
+    }
+
+    public void sendMessage(Message message) throws DAOException{
+        messageDao.create(message);
+    }
+
+    public List<Message> getUserMessages(User user) throws DAOException{
+        //" WHERE from_user_id=%d OR to_user_id=%d GROUP BY to_user_id,from_user_id" почему то не работает на h2 базе! на mysql ном
+        return messageDao.getMessagesByCriteria(String.format(" WHERE from_user_id=%d OR to_user_id=%d", user.getId(),user.getId()));
+        //return messageDao.getMessagesByUser(user.getId());
+    }
+
+    public List<Message> getUserMessages(User fromUser, User toUser) throws DAOException{
+        String sql = String.format(" WHERE from_user_id=%d AND to_user_id=%d OR from_user_id=%d AND to_user_id=%d GROUP BY id",
+                fromUser.getId(),toUser.getId(), toUser.getId(),fromUser.getId() );
+        return messageDao.getMessagesByCriteria(sql);
+    }
+
+    public List<User> getAll() throws DAOException{
+        return userDao.getAll();
     }
 }

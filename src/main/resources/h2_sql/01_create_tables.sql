@@ -28,7 +28,7 @@ CREATE TABLE messages (
 
 CREATE TABLE models(
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(32),
+  name VARCHAR(32)
 );
 
 CREATE TABLE cars(

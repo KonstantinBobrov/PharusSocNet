@@ -1,21 +1,26 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>User page</title>
-  <link rel="stylesheet" media="screen" href="css/styles.css" >
-  <link rel="shortcut icon" href="favicon.ico"/>
-</head>
-<body bgcolor=#edeef0 align=center>
+<%@ taglib uri="http://pharus.ru/taglibs" prefix="ptags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<div id="header">
-</div>
+<jsp:useBean id="logUser" type="ru.pharus.socnetwork.entity.User" scope="request"/>
+<jsp:useBean id="listMessages" type="java.util.List" scope="request"/>
 
-<div id="none"></div>
+<fmt:setLocale value="${not empty sessionScope['lang'] ? sessionScope['lang'] : 'Ru'}" />
+<fmt:setBundle basename="localization"/>
 
-<div>
-Страница сообщений от пользователей
-</div>
+<jsp:include page="template/header.jsp"/>
+   <jsp:include page="template/leftmenu.jsp"/>
+    <div id="rightpanel">
+        <div id="rightpanelbig">
+            <div id="friendsmodule">
+                <fmt:message key="lastmessages"/> (${listMessages.size()})<br>
+                <ptags:Messages list="${listMessages}"/>
+            </div>
+        </div>
 
-</body>
-</html>
+        <div id="rightpanelspace"></div>
+        <div id="rightpanelsmall"></div>
+        ${infoUser.fullName}
+    </div>
+<jsp:include page="template/footer.jsp"/>

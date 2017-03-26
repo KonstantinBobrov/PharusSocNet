@@ -121,6 +121,27 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+
+    <tag>
+        <name>Messages</name>
+        <tag-class>ru.pharus.socnetwork.jstlTags.Messages</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>list</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <name>ChatMessages</name>
+        <tag-class>ru.pharus.socnetwork.jstlTags.ChatMessages</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>list</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
     <!-- Invoke 'Generate' action to add tags or functions -->
 
 </taglib>

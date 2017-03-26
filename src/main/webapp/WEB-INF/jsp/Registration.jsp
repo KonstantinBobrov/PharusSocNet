@@ -17,19 +17,19 @@
             <span class="required_notification"> * Denotes Required Field </span>
         </li>
         <li>
-            <label for="login_email">Email login:</label>
+            <!-- <label for="login_email">Email login:</label> -->
             <input type="text" name="login_email" placeholder="example@email.com2" autocomplete="on" required/>
         </li>
         <li>
-            <label for="password">Password:</label>
+            <!-- <label for="password">Password:</label> -->
             <input type="password" name="password" placeholder="password..." required/>
         </li>
         <li>
-            <label for="full_name">Name:</label>
+            <!-- <label for="full_name">Name:</label> -->
             <input type="text" name="full_name" placeholder="Peter Ivanov" required/>
         </li>
         <li>
-            <label for="birth_date">Date:</label>
+            <!-- <label for="birth_date">Date:</label> -->
             <input type="text" name="full_name" placeholder="Peter Ivanov" required/>
         </li>
 
