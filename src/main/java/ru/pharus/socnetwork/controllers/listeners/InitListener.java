@@ -1,6 +1,5 @@
 package ru.pharus.socnetwork.controllers.listeners;
 
-import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.pharus.socnetwork.dao.DaoFactory;
@@ -14,6 +13,8 @@ import javax.sql.DataSource;
 
 /**
  * Web application deploying listener
+ *
+ * Main initialization web-application deploying listener
  */
 @WebListener
 public class InitListener implements ServletContextListener {
@@ -22,7 +23,13 @@ public class InitListener implements ServletContextListener {
     @Resource(name = "jdbc/TestDB")
     private DataSource dataSource;
 
-    @SneakyThrows
+    /**
+     * First initialization web-method
+     *
+     * Injection JNDI datasource in DAO layer, set path to sql resources.
+     * Injection Service layer in servlet context
+     * @param sce - standard ServletContextEvent event
+     */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         log.info("Start DaoFactory initialization");

@@ -7,10 +7,10 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
+import java.util.Objects;
 
 /**
- *
+ * Class Model java Bean entity - used for car models
  *
  * Lombok knowledge, for example:
  * Getters and Setters, Equals and Hashcode methods
@@ -20,7 +20,7 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Model {
+public class Model implements Comparable<Model> {
 //    id INT AUTO_INCREMENT PRIMARY KEY,
     private  int id;
 //    vendor_id INT NOT NULL,
@@ -30,4 +30,10 @@ public class Model {
     @NotBlank(message = "Enter model name")
     @Size(max = 32)
     private String name;
+
+    @Override
+    public int compareTo(Model o) {
+        // Пока решил использовать в качестве естественного порядка сортировки только id
+        return (id < o.id) ? -1 : (id > o.id) ? 1 : 0;
+    }
 }

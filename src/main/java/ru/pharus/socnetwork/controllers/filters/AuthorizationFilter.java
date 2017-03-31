@@ -15,7 +15,7 @@ import java.io.IOException;
  *
  */
 
-@WebFilter({"/user", "/friends", "/edit", "/feed", "/messages"})
+@WebFilter({"/user", "/friends", "/edit", "/feed", "/messages", "/im"})
 public class AuthorizationFilter implements Filter {
     private static final Logger log = LoggerFactory.getLogger(AuthorizationFilter.class);
 

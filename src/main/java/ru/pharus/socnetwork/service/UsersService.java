@@ -138,8 +138,8 @@ public class UsersService {
     }
 
     public List<Message> getUserMessages(User fromUser, User toUser) throws DAOException{
-        String sql = String.format(" WHERE from_user_id=%d AND to_user_id=%d OR from_user_id=%d AND to_user_id=%d GROUP BY id",
-                fromUser.getId(),toUser.getId(), toUser.getId(),fromUser.getId() );
+        String sql = String.format(" WHERE from_user_id=%1$d AND to_user_id=%2$d OR from_user_id=%2$d AND to_user_id=%1$d GROUP BY id",
+                fromUser.getId(),toUser.getId());
         return messageDao.getMessagesByCriteria(sql);
     }
 

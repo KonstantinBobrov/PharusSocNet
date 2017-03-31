@@ -1,10 +1,9 @@
 package ru.pharus.socnetwork.entity;
 
-
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.Range;
 import ru.pharus.socnetwork.entity.enums.Role;
 
 import javax.validation.constraints.Past;
@@ -13,11 +12,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * User entity class
+ * Class User java Bean entity - used for users
  *
- * Getters and Setters, Equals and Hashcode methods
- * Are made by hand without loombok and IntelliJ IDEA generator
+ * Getters and Setters
+ * Are made by hand without Lombok and IntelliJ IDEA generators
  */
+
+@EqualsAndHashCode
 public class User {
     private int id;
     @Email
@@ -35,13 +36,12 @@ public class User {
     private Role role;
     private String avatar;
 
-    // TODO: 19.03.2017 Equals and Heshcode
-
     public User(){
-
+        //@NoArgsConstructor
     }
 
     public User(int id, String login, String password, String fullName, LocalDate birthDate, LocalDateTime registerDate, Role role) {
+        //@AllArgsConstructor
         this.id = id;
         this.login = login;
         this.password = password;
@@ -49,6 +49,11 @@ public class User {
         this.birthDate = birthDate;
         this.registerDate = registerDate;
         this.role = role;
+    }
+
+    @Override
+    public String toString(){
+        return String.format("%s @ %s : %s", this.getClass().getName(), login, fullName);
     }
 
     public int getId() {
